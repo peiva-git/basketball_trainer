@@ -1,0 +1,2 @@
+paddlepaddle-gpu==2.5.1.post102
+pdoc

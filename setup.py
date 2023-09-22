@@ -7,7 +7,8 @@ with open('LICENSE') as f:
     license = f.read()
 
 dependencies = [
-
+    'paddlepaddle-gpu==2.5.1.post102',
+    'pdoc'
 ]
 
 setup(
