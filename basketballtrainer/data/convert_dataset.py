@@ -38,7 +38,7 @@ def convert_dataset_to_paddleseg_format(dataset_path: str, target_path: str):
         cv.imwrite(str(target / f'labels/label{sample_index + 1}.png'), resized_label)
 
 
-def __generate_ordered_filenames_lists(source):
+def __generate_ordered_filenames_lists(source: pathlib.Path) -> ([str], [str]):
     images = []
     labels = []
     for match_directory_path in glob.iglob(str(source / '*/*')):
