@@ -8,6 +8,7 @@ with open('LICENSE') as f:
 
 dependencies = [
     'paddlepaddle-gpu==2.5.1.post102',
+    'paddleseg==2.8.*'
     'pdoc'
 ]
 
