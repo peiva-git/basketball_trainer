@@ -25,7 +25,11 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             else:
                 return super().forward(x)
 
-    def __generate_random_crops(self, input_image, crop_height: int, crop_width: int, variance: int):
+    def __generate_random_crops(self,
+                                input_image: pp.Tensor,
+                                crop_height: int,
+                                crop_width: int,
+                                variance: int) -> (int, int, pp.Tensor):
         image_height, image_width = pp.shape(input_image)[2:]
         crops = []
         # first crop at a random location, with the specified size
@@ -44,7 +48,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             )
         ))
         # then generate random crops similar (IoU > 0.9) to the first one
-        for i in range(1, self.__random_crops):
+        for _ in range(1, self.__random_crops):
             x = random.randint(first_crop_x - variance, first_crop_x + variance)
             y = random.randint(first_crop_y - variance, first_crop_y + variance)
             crops.append((
