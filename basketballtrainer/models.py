@@ -7,9 +7,17 @@ from paddleseg.models import PPLiteSeg
 
 @manager.MODELS.add_component
 class PPLiteSegRandomCrops(PPLiteSeg):
-    def __init__(self, num_classes: int, backbone, pretrained=None, random_crops: int = None):
+    def __init__(self,
+                 num_classes: int,
+                 backbone,
+                 pretrained=None,
+                 random_crops: int = None,
+                 crop_ratio: float = 0.8,
+                 crop_variance: int = 100):
         super().__init__(num_classes, backbone, pretrained=pretrained)
         self.__random_crops = random_crops
+        self.__first_crop_ratio = crop_ratio
+        self.__crop_variance = crop_variance
 
     def forward(self, x):
         if self.training:
@@ -17,10 +25,23 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         else:
             if self.__random_crops is not None:
                 x_height_width = pp.shape(x)[2:]
-                random_crops = self.__generate_random_crops(x, x_height_width[0] * 0.8, x_height_width[1] * 0.8, variance=100)
                 # 1. from x, obtain random crops
+                random_crops = self.__generate_random_crops(
+                    x,
+                    x_height_width[0] * self.__first_crop_ratio,
+                    x_height_width[1] * self.__first_crop_ratio,
+                    variance=self.__crop_variance
+                )
                 # 2. use super().forward to calculate logits for each random crop
+                logit_tensors = [
+                    # the super().forward() method generates a list of 3-D tensors, but if self.training == False
+                    # that list has only one element
+                    super().forward(random_crop)[0]
+                    for random_crop in random_crops
+                ]
                 # 3. aggregate
+                result = pp.mean(pp.to_tensor(logit_tensors), axis=0)
+                return [result]
                 pass
             else:
                 return super().forward(x)
@@ -61,5 +82,14 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                     ends=(min(y + crop_height, image_height), min(x + crop_width, image_width))
                 )
             ))
-        return crops
+        # pad crops to have a constant tensor shape
+        # crops should have the same shape as input_image
+        return [
+            pp.nn.functional.pad(
+                crop,
+                pad=(crop_x, image_width - crop_x - crop_width, crop_y, image_height - crop_y - crop_height),
+                value=127.5
+            )
+            for crop_x, crop_y, crop in crops
+        ]
 
