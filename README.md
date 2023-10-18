@@ -59,7 +59,7 @@ To train the BasketballDetector segmentation model, run:
 cd PaddleSeg
 export CUDA_VISIBLE_DEVICES=0
 python tools/train.py \
---config ../config/pp_liteseg_stdc1_basketballdetector_1024x512_pretrain-10rancrops.yml \
+--config ../config/pp_liteseg_base_stdc1_basketballdetector_1024x512.yml \
 --do_eval \
 --use_vdl \
 --save_interval 500
@@ -74,7 +74,7 @@ To evaluate the obtained model, run:
 ```shell
 cd PaddleSeg
 python tools/val.py \
---config ../basketballdetector/config/pp_liteseg_stdc1_basketballdetector_1024x512_pretrain-10rancrops.yml \
+--config ../basketballdetector/config/pp_liteseg_base_stdc1_basketballdetector_1024x512.yml \
 --model_path output/best_model/model.pdparams
 ```
 
@@ -84,7 +84,7 @@ For additional options refer to the
 ## Results
 
 The following results have been obtained by training a model with 
-[this configuration](config/pp_liteseg_stdc1_basketballdetector_1024x512_pretrain-10rancrops.yml)
+[this configuration](config/pp_liteseg_base_stdc1_basketballdetector_1024x512.yml)
 using the tools provided by [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.8/docs/train/train.md).
 
 In the following table you can find the summarized results of the obtained model.

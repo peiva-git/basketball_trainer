@@ -1,24 +1,34 @@
 import random
 
 import paddle as pp
-from paddleseg.cvlibs import manager
 from paddleseg.models import PPLiteSeg
 
 
-@manager.MODELS.add_component
 class PPLiteSegRandomCrops(PPLiteSeg):
     def __init__(self,
                  num_classes: int,
                  backbone,
+                 backbone_indices=(2, 3, 4),
+                 arm_type='UAFM_SpAtten',
+                 cm_bin_sizes=(1, 2, 4),
+                 cm_out_ch=128,
+                 arm_out_chs=(64, 96, 128),
+                 seg_head_inter_chs=(64, 64, 64),
+                 resize_mode='bilinear',
                  pretrained=None,
                  random_crops: int = None,
                  crop_ratio: float = 0.8):
         super(PPLiteSegRandomCrops, self).__init__(
-            num_classes,
-            backbone,
-            pretrained=pretrained,
-            arm_out_chs=[32, 64, 128],
-            seg_head_inter_chs=[32, 64, 128]
+            num_classes=num_classes,
+            backbone=backbone,
+            backbone_indices=backbone_indices,
+            arm_type=arm_type,
+            cm_bin_sizes=cm_bin_sizes,
+            cm_out_ch=cm_out_ch,
+            arm_out_chs=arm_out_chs,
+            seg_head_inter_chs=seg_head_inter_chs,
+            resize_mode=resize_mode,
+            pretrained=pretrained
         )
         self.__random_crops = random_crops
         self.__first_crop_ratio = crop_ratio

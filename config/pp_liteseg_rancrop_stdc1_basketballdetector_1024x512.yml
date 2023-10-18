@@ -33,7 +33,6 @@ val_dataset:
 test_config:
   aug_eval: True
   scales: 1.0
-  auc_roc: True
 
 loss:
   types:
@@ -59,10 +58,11 @@ lr_scheduler:
   power: 0.9
 
 model:
-  type: PPLiteSeg
+  type: PPLiteSegRandomCrops
   num_classes: 2
   backbone:
     type: STDC1
     pretrained: https://bj.bcebos.com/paddleseg/dygraph/PP_STDCNet1.tar.gz
   arm_out_chs: [32, 64, 128]
   seg_head_inter_chs: [32, 64, 128]
+  random_crops: 3
