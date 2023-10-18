@@ -62,7 +62,8 @@ python tools/train.py \
 --configs ../configs/pp_liteseg_base_stdc1_basketballdetector_1024x512.yml \
 --do_eval \
 --use_vdl \
---save_interval 500
+--save_interval 5000 \
+--keep_checkpoint_max 32
 ```
 The trained models will then be available in the `PaddleSeg/output` directory.
 More information on what these options do and on how to visualize the training process
