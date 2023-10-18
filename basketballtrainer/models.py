@@ -30,7 +30,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             if self.__random_crops is not None:
                 x_height_width = pp.shape(x)[2:]
                 # 1. from x, obtain random crops
-                random_crops = self.__generate_random_crops(
+                random_crops = self.generate_random_crops(
                     x,
                     int(x_height_width[0] * self.__first_crop_ratio),
                     int(x_height_width[1] * self.__first_crop_ratio),
@@ -48,10 +48,10 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             else:
                 return super(PPLiteSegRandomCrops, self).forward(x)
 
-    def __generate_random_crops(self,
-                                input_image: pp.Tensor,
-                                first_crop_height: int,
-                                first_crop_width: int) -> (int, int, pp.Tensor):
+    def generate_random_crops(self,
+                              input_image: pp.Tensor,
+                              first_crop_height: int,
+                              first_crop_width: int) -> (int, int, pp.Tensor):
         image_height, image_width = pp.shape(input_image)[2:]
         crops = []
         # first crop at a random location, with the specified size
