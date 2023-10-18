@@ -13,26 +13,12 @@ train_dataset:
       max_scale_factor: 2.0
       scale_step_size: 0.25
     - type: RandomPaddingCrop
-      crop_size: [820, 410] # [0.8 * 1024, 0.8 * 512]
-    - type: RandomPaddingCrop
-      crop_size: [820, 410]
-    - type: RandomPaddingCrop
-      crop_size: [820, 410]
-    - type: RandomPaddingCrop
-      crop_size: [820, 410]
-    - type: RandomPaddingCrop
-      crop_size: [820, 410]
-    - type: RandomPaddingCrop
-      crop_size: [820, 410]
-    - type: RandomPaddingCrop
-      crop_size: [820, 410]
-    - type: RandomPaddingCrop
-      crop_size: [820, 410]
-    - type: RandomPaddingCrop
-      crop_size: [820, 410]
-    - type: RandomPaddingCrop
-      crop_size: [820, 410]
+      crop_size: [1024, 512]
     - type: RandomHorizontalFlip
+    - type: RandomDistort
+      brightness_range: 0.5
+      contrast_range: 0.5
+      saturation_range: 0.5
     - type: Normalize
 
 val_dataset:
@@ -50,12 +36,12 @@ test_config:
 
 loss:
   types:
-    - type: CrossEntropyLoss
-      weight: [0.8, 0.2]
-    - type: CrossEntropyLoss
-      weight: [0.8, 0.2]
-    - type: CrossEntropyLoss
-      weight: [0.8, 0.2]
+    - type: OhemCrossEntropyLoss
+      min_kept: 130000
+    - type: OhemCrossEntropyLoss
+      min_kept: 130000
+    - type: OhemCrossEntropyLoss
+      min_kept: 130000
   coef: [1, 1, 1]
 
 optimizer:
