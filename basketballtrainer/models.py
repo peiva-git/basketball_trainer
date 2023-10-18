@@ -1,6 +1,5 @@
 import random
 
-import numpy
 import paddle as pp
 from paddleseg.cvlibs import manager
 from paddleseg.models import PPLiteSeg
@@ -13,8 +12,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                  backbone,
                  pretrained=None,
                  random_crops: int = None,
-                 crop_ratio: float = 0.8,
-                 crop_variance: int = 50):
+                 crop_ratio: float = 0.8):
         super().__init__(
             num_classes,
             backbone,
@@ -24,7 +22,6 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         )
         self.__random_crops = random_crops
         self.__first_crop_ratio = crop_ratio
-        self.__crop_variance = crop_variance
 
     def forward(self, x):
         if self.training:
@@ -37,7 +34,6 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                     x,
                     int(x_height_width[0] * self.__first_crop_ratio),
                     int(x_height_width[1] * self.__first_crop_ratio),
-                    variance=self.__crop_variance
                 )
                 # 2. use super().forward to calculate logits for each random crop
                 logit_tensors = [
@@ -56,8 +52,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
     def __generate_random_crops(self,
                                 input_image: pp.Tensor,
                                 first_crop_height: int,
-                                first_crop_width: int,
-                                variance: int) -> (int, int, pp.Tensor):
+                                first_crop_width: int) -> (int, int, pp.Tensor):
         image_height, image_width = pp.shape(input_image)[2:]
         crops = []
         # first crop at a random location, with the specified size
@@ -78,11 +73,13 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             )
         ))
         # then generate random crops similar (IoU > 0.9) to the first one
+        variance_x = int((image_width - first_crop_width) / 2)
+        variance_y = int((image_height - first_crop_height) / 2)
         for _ in range(1, self.__random_crops):
-            x = random.randint(first_crop_x - variance, first_crop_x + variance)
-            y = random.randint(first_crop_y - variance, first_crop_y + variance)
-            crop_width = random.randint(first_crop_width - variance, first_crop_width + variance)
-            crop_height = random.randint(first_crop_height - variance, first_crop_height + variance)
+            x = random.randint(first_crop_x - variance_x, first_crop_x + variance_x)
+            y = random.randint(first_crop_y - variance_y, first_crop_y + variance_y)
+            crop_width = random.randint(first_crop_width - variance_x, first_crop_width + variance_x)
+            crop_height = random.randint(first_crop_height - variance_y, first_crop_height + variance_y)
             crops.append((
                 max(0, x),
                 max(0, y),
