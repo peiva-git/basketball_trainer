@@ -13,7 +13,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                  pretrained=None,
                  random_crops: int = None,
                  crop_ratio: float = 0.8):
-        super().__init__(
+        super(PPLiteSegRandomCrops, self).__init__(
             num_classes,
             backbone,
             pretrained=pretrained,
@@ -25,7 +25,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
 
     def forward(self, x):
         if self.training:
-            return super().forward(x)
+            return super(PPLiteSegRandomCrops, self).forward(x)
         else:
             if self.__random_crops is not None:
                 x_height_width = pp.shape(x)[2:]
@@ -45,9 +45,8 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                 # 3. aggregate
                 result = pp.mean(pp.to_tensor(logit_tensors), axis=0)
                 return [result]
-                pass
             else:
-                return super().forward(x)
+                return super(PPLiteSegRandomCrops, self).forward(x)
 
     def __generate_random_crops(self,
                                 input_image: pp.Tensor,
@@ -63,8 +62,6 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         crops.append((
             first_crop_x,
             first_crop_y,
-            first_crop_width,
-            first_crop_height,
             pp.slice(
                 input_image,
                 axes=(2, 3),
@@ -83,8 +80,6 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             crops.append((
                 max(0, x),
                 max(0, y),
-                min(crop_width, image_width - x),
-                min(crop_height, image_height - y),
                 pp.slice(
                     input_image,
                     axes=(2, 3),
@@ -97,8 +92,13 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         return [
             pp.nn.functional.pad(
                 crop,
-                pad=(crop_x, image_width - crop_x - width, crop_y, image_height - crop_y - height),
+                pad=(
+                    crop_x,
+                    image_width - crop_x - pp.shape(crop).numpy()[3],
+                    crop_y,
+                    image_height - crop_y - pp.shape(crop).numpy()[2]
+                ),
                 value=127.5
             )
-            for crop_x, crop_y, width, height, crop in crops
+            for crop_x, crop_y, crop in crops
         ]

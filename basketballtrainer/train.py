@@ -78,7 +78,7 @@ def train_extended_model():
         batch_size=4,
         use_vdl=True,
         losses=losses,
-        test_config={'aug_eval': True, 'scales': 1.0, 'auc_roc': True},
+        test_config={'aug_eval': True, 'scales': 1.0},
         save_interval=50
     )
 
