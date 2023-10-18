@@ -9,7 +9,10 @@ with open('LICENSE') as f:
 dependencies = [
     'paddlepaddle==2.5.1',
     'paddleseg==2.8.*',
-    'pdoc'
+    'Pillow>=10.0.*',
+    'numpy>=1.25.*',
+    'opencv-python>=4.5.*',
+    'pdoc==14.1.*'
 ]
 
 setup(
