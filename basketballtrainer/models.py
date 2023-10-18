@@ -86,8 +86,8 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             crops.append((
                 max(0, x),
                 max(0, y),
-                crop_width,
-                crop_height,
+                min(crop_width, image_width - x),
+                min(crop_height, image_height - y),
                 pp.slice(
                     input_image,
                     axes=(2, 3),
