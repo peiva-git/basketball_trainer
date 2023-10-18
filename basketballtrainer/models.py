@@ -1,5 +1,6 @@
 import random
 
+import numpy
 import paddle as pp
 from paddleseg.cvlibs import manager
 from paddleseg.models import PPLiteSeg
@@ -13,8 +14,14 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                  pretrained=None,
                  random_crops: int = None,
                  crop_ratio: float = 0.8,
-                 crop_variance: int = 100):
-        super().__init__(num_classes, backbone, pretrained=pretrained)
+                 crop_variance: int = 50):
+        super().__init__(
+            num_classes,
+            backbone,
+            pretrained=pretrained,
+            arm_out_chs=[32, 64, 128],
+            seg_head_inter_chs=[32, 64, 128]
+        )
         self.__random_crops = random_crops
         self.__first_crop_ratio = crop_ratio
         self.__crop_variance = crop_variance
@@ -28,15 +35,15 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                 # 1. from x, obtain random crops
                 random_crops = self.__generate_random_crops(
                     x,
-                    x_height_width[0] * self.__first_crop_ratio,
-                    x_height_width[1] * self.__first_crop_ratio,
+                    int(x_height_width[0] * self.__first_crop_ratio),
+                    int(x_height_width[1] * self.__first_crop_ratio),
                     variance=self.__crop_variance
                 )
                 # 2. use super().forward to calculate logits for each random crop
                 logit_tensors = [
-                    # the super().forward() method generates a list of 3-D tensors, but if self.training == False
+                    # the super().forward() method generates a list of 4-D tensors, but since self.training == False
                     # that list has only one element
-                    super().forward(random_crop)[0]
+                    super(PPLiteSegRandomCrops, self).forward(random_crop)[0]
                     for random_crop in random_crops
                 ]
                 # 3. aggregate
@@ -48,33 +55,39 @@ class PPLiteSegRandomCrops(PPLiteSeg):
 
     def __generate_random_crops(self,
                                 input_image: pp.Tensor,
-                                crop_height: int,
-                                crop_width: int,
+                                first_crop_height: int,
+                                first_crop_width: int,
                                 variance: int) -> (int, int, pp.Tensor):
         image_height, image_width = pp.shape(input_image)[2:]
         crops = []
         # first crop at a random location, with the specified size
-        max_x = image_width - crop_width
-        max_y = image_height - crop_height
-        first_crop_x = random.randint(0, max_x)
-        first_crop_y = random.randint(0, max_y)
+        first_max_x = image_width - first_crop_width
+        first_max_y = image_height - first_crop_height
+        first_crop_x = random.randint(0, first_max_x)
+        first_crop_y = random.randint(0, first_max_y)
         crops.append((
             first_crop_x,
             first_crop_y,
+            first_crop_width,
+            first_crop_height,
             pp.slice(
                 input_image,
                 axes=(2, 3),
                 starts=(first_crop_y, first_crop_x),
-                ends=(first_crop_y + crop_height, first_crop_x + crop_width)
+                ends=(first_crop_y + first_crop_height, first_crop_x + first_crop_width)
             )
         ))
         # then generate random crops similar (IoU > 0.9) to the first one
         for _ in range(1, self.__random_crops):
             x = random.randint(first_crop_x - variance, first_crop_x + variance)
             y = random.randint(first_crop_y - variance, first_crop_y + variance)
+            crop_width = random.randint(first_crop_width - variance, first_crop_width + variance)
+            crop_height = random.randint(first_crop_height - variance, first_crop_height + variance)
             crops.append((
                 max(0, x),
                 max(0, y),
+                crop_width,
+                crop_height,
                 pp.slice(
                     input_image,
                     axes=(2, 3),
@@ -87,9 +100,8 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         return [
             pp.nn.functional.pad(
                 crop,
-                pad=(crop_x, image_width - crop_x - crop_width, crop_y, image_height - crop_y - crop_height),
+                pad=(crop_x, image_width - crop_x - width, crop_y, image_height - crop_y - height),
                 value=127.5
             )
-            for crop_x, crop_y, crop in crops
+            for crop_x, crop_y, width, height, crop in crops
         ]
-

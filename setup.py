@@ -8,7 +8,7 @@ with open('LICENSE') as f:
 
 dependencies = [
     'paddlepaddle-gpu==2.5.1.post102',
-    'paddleseg==2.8.*'
+    'paddleseg==2.8.*',
     'pdoc'
 ]
 
@@ -26,7 +26,7 @@ setup(
     install_requires=dependencies,
     entry_points={
         'console_scripts': [
-
+            'train = basketballtrainer.train:train_extended_model'
         ]
     },
 )
