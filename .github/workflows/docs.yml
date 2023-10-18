@@ -2,9 +2,12 @@ name: build and deploy docs
 
 # build the documentation whenever there are new commits on main
 on:
-  push:
+  workflow_run:
+    workflows: ["build and test CPU"]
     branches:
       - master
+    types:
+      - completed
     # Alternative: only build for tags.
     # tags:
     #   - '*'
