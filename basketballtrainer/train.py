@@ -2,6 +2,7 @@ from paddleseg.models import PPLiteSeg
 from paddleseg.models.backbones import STDC1
 from paddleseg.models.losses import OhemCrossEntropyLoss
 from paddle.optimizer.lr import PolynomialDecay
+from paddle.optimizer.lr import LinearWarmup
 from paddle.optimizer import Momentum
 
 import paddleseg.transforms as t
@@ -50,7 +51,7 @@ def train_extended_model():
     ]
 
     losses = {'types': [OhemCrossEntropyLoss(min_kept=130000)] * 3, 'coef': [1] * 3}
-    base_lr = 0.01
+    base_lr = 0.005
     lr = PolynomialDecay(base_lr, power=0.9, decay_steps=1000, end_lr=0)
     optimizer = Momentum(lr, parameters=model.parameters(), momentum=0.9, weight_decay=4.0e-5)
 
