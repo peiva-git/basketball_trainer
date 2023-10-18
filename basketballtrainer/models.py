@@ -28,13 +28,8 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             return super(PPLiteSegRandomCrops, self).forward(x)
         else:
             if self.__random_crops is not None:
-                x_height_width = pp.shape(x)[2:]
                 # 1. from x, obtain random crops
-                random_crops = self.generate_random_crops(
-                    x,
-                    int(x_height_width[0] * self.__first_crop_ratio),
-                    int(x_height_width[1] * self.__first_crop_ratio),
-                )
+                random_crops = self.generate_random_crops(x)
                 # 2. use super().forward to calculate logits for each random crop
                 logit_tensors = [
                     # the super().forward() method generates a list of 4-D tensors, but since self.training == False
@@ -49,10 +44,10 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                 return super(PPLiteSegRandomCrops, self).forward(x)
 
     def generate_random_crops(self,
-                              input_image: pp.Tensor,
-                              first_crop_height: int,
-                              first_crop_width: int) -> (int, int, pp.Tensor):
-        image_height, image_width = pp.shape(input_image)[2:]
+                              input_image_batch: pp.Tensor) -> list[pp.Tensor]:
+        image_height, image_width = pp.shape(input_image_batch)[2:]
+        first_crop_height = int(self.__first_crop_ratio * image_height)
+        first_crop_width = int(self.__first_crop_ratio * image_width)
         crops = []
         # first crop at a random location, with the specified size
         first_max_x = image_width - first_crop_width
@@ -63,7 +58,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             first_crop_x,
             first_crop_y,
             pp.slice(
-                input_image,
+                input_image_batch,
                 axes=(2, 3),
                 starts=(first_crop_y, first_crop_x),
                 ends=(first_crop_y + first_crop_height, first_crop_x + first_crop_width)
@@ -81,7 +76,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                 max(0, x),
                 max(0, y),
                 pp.slice(
-                    input_image,
+                    input_image_batch,
                     axes=(2, 3),
                     starts=(max(0, y), max(0, x)),
                     ends=(min(y + crop_height, image_height), min(x + crop_width, image_width))
