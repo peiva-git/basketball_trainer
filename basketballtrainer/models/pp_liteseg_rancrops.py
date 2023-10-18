@@ -24,6 +24,14 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         self.__first_crop_ratio = crop_ratio
 
     def forward(self, x):
+        """
+        This method overrides the `forward` method from the `PPLiteSeg` class.
+        During training, it behaves the same as the superclass method.
+        During inference, it generates the specified number of random crops for each predicted image and stacks them
+        by averaging their channel values.
+        :param x: The input batch
+        :return: A logits list
+        """
         if self.training:
             return super(PPLiteSegRandomCrops, self).forward(x)
         else:
@@ -44,9 +52,16 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                 return super(PPLiteSegRandomCrops, self).forward(x)
 
     def generate_random_crops(self, input_image_batch: pp.Tensor) -> list[pp.Tensor]:
+        """
+        This method generates the random crops from a given batch of input images.
+        All the crops have the same shape as the original image, with added padding values where needed.
+        The default padding value is 127.5.
+        :param input_image_batch: A tensor of shape N x C x H x W
+        :return: The generated random crops, a list of N x C x H x W shaped tensors
+        """
         image_height, image_width = pp.shape(input_image_batch)[2:]
-        first_crop_height = int(self.__first_crop_ratio * image_height)
-        first_crop_width = int(self.__first_crop_ratio * image_width)
+        first_crop_height = int(self.__first_crop_ratio * image_height.numpy())
+        first_crop_width = int(self.__first_crop_ratio * image_width.numpy())
         crops = []
         # first crop at a random location, with the specified size
         first_max_x = image_width - first_crop_width

@@ -29,7 +29,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'train = basketballtrainer.train:train_extended_model'
+            'train = basketballtrainer.cli:train_model_command'
         ]
     },
 )
