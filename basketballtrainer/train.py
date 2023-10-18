@@ -52,8 +52,9 @@ def train_extended_model():
 
     losses = {'types': [OhemCrossEntropyLoss(min_kept=130000)] * 3, 'coef': [1] * 3}
     base_lr = 0.005
-    lr = PolynomialDecay(base_lr, power=0.9, decay_steps=1000, end_lr=0)
-    optimizer = Momentum(lr, parameters=model.parameters(), momentum=0.9, weight_decay=4.0e-5)
+    lr = PolynomialDecay(base_lr, power=0.9, decay_steps=160000, end_lr=0)
+    scheduler = LinearWarmup(lr, warmup_steps=1000, start_lr=1.0e-5, end_lr=base_lr)
+    optimizer = Momentum(learning_rate=scheduler, parameters=model.parameters(), momentum=0.9, weight_decay=4.0e-5)
 
     train_dataset = Dataset(
         dataset_root='/mnt/DATA/tesi/dataset/dataset_paddleseg/',
@@ -80,7 +81,8 @@ def train_extended_model():
         use_vdl=True,
         losses=losses,
         test_config={'aug_eval': True, 'scales': 1.0},
-        save_interval=50
+        save_interval=5000,
+        keep_checkpoint_max=32
     )
 
 
