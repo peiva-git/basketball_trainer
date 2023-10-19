@@ -1,3 +1,7 @@
+"""
+This module contains all the code related to the PPLiteSegRandomCrops model.
+"""
+
 import random
 
 import paddle as pp
@@ -5,6 +9,16 @@ from paddleseg.models import PPLiteSeg
 
 
 class PPLiteSegRandomCrops(PPLiteSeg):
+    """
+    This class represents an extension of the PPLiteSeg model.
+    During training time, the PPLiteSeg model and this model behave exactly the same.
+    During inference time, this model generates multiple random crops from each input image
+    and computes the prediction for each of these random crops.
+    All the resulting predictions are then averaged across random crops, in order to obtain a single final prediction.
+    """
+    __random_crops: int
+    __first_crop_ratio: float
+
     def __init__(self,
                  num_classes: int,
                  backbone,
@@ -18,6 +32,25 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                  pretrained=None,
                  random_crops: int = None,
                  crop_ratio: float = 0.8):
+        """
+        This constructor initializes a PPLiteSeg model with the same default parameters as the base class.
+        Only the :param random_crops and :param crop_ratio parameters are specific to this model.
+        For more details on the PPLiteSeg's parameters, refer to the
+        [official documentation](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.8/paddleseg/models/pp_liteseg.py).
+        :param num_classes: The number of target classes
+        :param backbone: Backbone network
+        :param backbone_indices: Indices of output of backbone
+        :param arm_type: The type of attention refinement module
+        :param cm_bin_sizes: The bin size of the context module
+        :param cm_out_ch: The output channels of the last context module
+        :param arm_out_chs: The output channels of each arm module
+        :param seg_head_inter_chs: The intermediate channels of the segmentation head
+        :param resize_mode: The resize mode for the upsampling operation in the decoder
+        :param pretrained: Pretrained model path
+        :param random_crops: The number of random crops to use during inference time
+        :param crop_ratio: Percentage of the input image size to be used as the first crop size.
+        The first random crop size is computed as `(crop_h, crop_w) = (img_h * crop_ratio, img_w * crop_ratio)`.
+        """
         super(PPLiteSegRandomCrops, self).__init__(
             num_classes=num_classes,
             backbone=backbone,
