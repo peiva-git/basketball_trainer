@@ -21,7 +21,7 @@ This repository contains all the necessary tools to train the
 ## Description
 
 This project uses the [PaddleSeg toolkit](https://github.com/PaddlePaddle/PaddleSeg)
-to train a [PPLiteSeg](https://github.com/PaddlePaddle/PaddleSeg/tree/release/2.8/configs/pp_liteseg)
+to train a modified [PPLiteSeg](https://github.com/PaddlePaddle/PaddleSeg/tree/release/2.8/configs/pp_liteseg)
 real-time semantic segmentation model.
 The configuration files used during training can be found [here](configs).
 In the following sections, you will find detailed instructions on how to set up a working environment and
@@ -38,15 +38,27 @@ configuration file for the PPLiteSeg model applied to the
 
 Before being able to train the model, you must install [Paddle](https://github.com/PaddlePaddle/Paddle) and
 [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg).
-You can use the [provided conda environment](conda/pp-environment.yml) by running the following command:
+You can use one of the [provided conda environments](conda) by running the following command:
 ```shell
-conda create --name myenv-pp --file pp-environment.yml
+conda create --name myenv-pp --file pp-[cpu|gpu].yml
+```
+It is recommended to have a CUDA enabled GPU in order to take advantage of GPU acceleration.
+
+In case you're using the GPU version, don't forget to set up the required environment variables as well:
+```shell
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib/:$LD_LIBRARY_PATH
+```
+You can automate the process of adding the environment variables to execute automatically 
+each time you activate your conda environment by running the following commands:
+```shell
+mkdir -p $CONDA_PREFIX/etc/conda/activate.d
+echo 'export LD_LIBRARY_PATH=$CONDA_PREFIX/lib/:$LD_LIBRARY_PATH' >> $CONDA_PREFIX/etc/conda/activate.d/env_vars.sh
 ```
 
-**Please note** that both the provided environment and the
-[Paddle PyPi release](https://pypi.org/project/paddlepaddle-gpu/) currently 
-require the CUDA Runtime API version 10.2 to be installed in order to run correctly.
-If you want a different version, refer to the 
+The currently available [Paddle PyPi GPU version release](https://pypi.org/project/paddlepaddle-gpu/) requires the
+CUDA Runtime API version 10.2 to be installed in order to run correctly.
+This dependency is therefore listed in the provided [conda environment](conda/pp-gpu.yml).
+**If you want to use a different CUDA version**, refer to the
 [official documentation](https://www.paddlepaddle.org.cn/documentation/docs/en/install/pip/linux-pip_en.html).
 
 Also, to avoid unexpected errors, the [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg)
@@ -61,16 +73,16 @@ pip install -v -e .
 
 To train the BasketballDetector segmentation model, run:
 ```shell
-cd PaddleSeg
 export CUDA_VISIBLE_DEVICES=0
-python tools/train.py \
---configs ../configs/pp_liteseg_base_stdc1_basketballdetector_1024x512.yml \
+python PaddleSeg/tools/train.py \
+--configs configs/pp_liteseg_base_stdc1_basketballdetector_1024x512.yml \
 --do_eval \
 --use_vdl \
 --save_interval 5000 \
---keep_checkpoint_max 32
+--keep_checkpoint_max 32 \
+--save_dir output
 ```
-The trained models will then be available in the `PaddleSeg/output` directory.
+The trained models will then be available in the `output/` directory.
 More information on what these options do and on how to visualize the training process
 can be found [here](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.8/docs/train/train.md).
 
