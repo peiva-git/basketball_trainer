@@ -91,7 +91,7 @@ dependencies:
     - matplotlib==3.8.0
     - opencv-python==4.5.5.64
     - packaging==23.2
-    - paddlepaddle-gpu==2.5.1.post102
+    - paddlepaddle-gpu==2.5.1
     - paddleseg==2.8.0
     - pandas==2.1.1
     - pdoc==14.1.0
