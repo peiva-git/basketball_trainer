@@ -6,14 +6,8 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     license = f.read()
 
-dependencies = [
-    'paddlepaddle==2.5.1',
-    'paddleseg==2.8.*',
-    'Pillow>=10.0.*',
-    'numpy>=1.25.*',
-    'opencv-python>=4.5.*',
-    'pdoc==14.1.*'
-]
+with open('requirements.txt') as f:
+    required_packages = f.read()
 
 setup(
     name='basketballtrainer',
@@ -26,7 +20,7 @@ setup(
     license=license,
     packages=find_packages(exclude=('tests', 'docs', 'output', 'assets')),
     python_requires='>=3.8,<=3.11',
-    install_requires=dependencies,
+    install_requires=required_packages,
     dependency_links=[
         'https://mirror.baidu.com/pypi/simple'
     ],
