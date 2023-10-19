@@ -14,7 +14,6 @@ import glob
 import pathlib
 
 import cv2 as cv
-import numpy as np
 
 
 def convert_dataset_to_paddleseg_format(dataset_path: str, target_path: str):
@@ -58,32 +57,8 @@ def __generate_ordered_filenames_lists(source: pathlib.Path) -> ([str], [str]):
     return images, labels
 
 
-def convert_dataset_to_six_channel_images_format(dataset_path: str, target_path: str):
-    source = pathlib.Path(dataset_path)
-    target = pathlib.Path(target_path)
-    images, labels = __generate_ordered_filenames_lists(source)
-
-    for sample_index in range(1, len(images)):
-        current_image = cv.imread(images[sample_index])
-        previous_image = cv.imread(images[sample_index - 1])
-        current_image_resized = cv.resize(current_image, (1024, 512))
-        previous_image_resized = cv.resize(previous_image, (1024, 512))
-        label = cv.imread(labels[sample_index])
-        label_resized = cv.resize(label, (1024, 512))
-        difference = current_image_resized - previous_image_resized
-        expanded_image = np.concatenate((current_image_resized, difference), axis=2)
-        cv.imwrite(str(target / f'images/image{sample_index}.png'), expanded_image)
-        cv.imwrite(str(target / f'labels/label{sample_index}.png'), label_resized)
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--mode',
-        help='Choose whether to save samples as 3-channel RGB images or 6-channel difference images',
-        choices=['image', 'image-diff'],
-        required=True
-    )
     parser.add_argument(
         '--source_dir',
         help='Root directory of the original dataset',
@@ -97,7 +72,4 @@ if __name__ == '__main__':
         required=True
     )
     args = parser.parse_args()
-    if args.mode == 'image':
-        convert_dataset_to_paddleseg_format(args.source_dir, args.target_dir)
-    else:
-        convert_dataset_to_six_channel_images_format(args.source_dir, args.target_dir)
+    convert_dataset_to_paddleseg_format(args.source_dir, args.target_dir)
