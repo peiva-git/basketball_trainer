@@ -1,5 +1,4 @@
--i https://mirror.baidu.com/pypi/simple
-paddlepaddle==2.5.1
+paddlepaddle-gpu==2.5.*
 paddleseg==2.8.*
 Pillow>=10.0.*
 numpy>=1.25.*

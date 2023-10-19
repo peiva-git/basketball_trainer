@@ -21,9 +21,6 @@ setup(
     packages=find_packages(exclude=('tests', 'docs', 'output', 'assets')),
     python_requires='>=3.8,<=3.11',
     install_requires=required_packages,
-    dependency_links=[
-        'https://mirror.baidu.com/pypi/simple'
-    ],
     entry_points={
         'console_scripts': [
             'train = basketballtrainer.cli:train_model_command'
