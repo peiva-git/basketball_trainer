@@ -3,6 +3,7 @@
 [![build and deploy docs](https://github.com/peiva-git/basketball_trainer/actions/workflows/docs.yml/badge.svg)](https://github.com/peiva-git/basketball_trainer/actions/workflows/docs.yml)
 [![build and test CPU](https://github.com/peiva-git/basketball_trainer/actions/workflows/build-and-test-cpu.yml/badge.svg)](https://github.com/peiva-git/basketball_trainer/actions/workflows/build-and-test-cpu.yml)
 [![build and test GPU](https://github.com/peiva-git/basketball_trainer/actions/workflows/build-and-test-gpu.yml/badge.svg)](https://github.com/peiva-git/basketball_trainer/actions/workflows/build-and-test-gpu.yml)
+![License](https://img.shields.io/github/license/peiva-git/basketball_trainer)
 
 
 This repository contains all the necessary tools to train the
