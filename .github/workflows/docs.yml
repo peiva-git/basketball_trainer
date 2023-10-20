@@ -37,7 +37,7 @@ jobs:
         run: | 
           export LD_LIBRARY_PATH=$CONDA/lib/:$LD_LIBRARY_PATH
           export PDOC_ALLOW_EXEC=1
-      - name: Installa package
+      - name: Install package
         run: $CONDA/bin/pip install -e .
 
       - run: $CONDA/bin/pdoc -o docs/ basketballtrainer
