@@ -23,7 +23,8 @@ setup(
     install_requires=required_packages,
     entry_points={
         'console_scripts': [
-            'train = basketballtrainer.cli:train_model_command'
+            'train = basketballtrainer.cli:train_model_command',
+            'evaluate = basketballtrainer.cli:evaluate_model_command'
         ]
     },
 )
