@@ -33,14 +33,13 @@ jobs:
       - name: Install dependencies
         run: |
           conda env update --file conda/pp-gpu.yml --name base
-      - name: Update environment variables
-        run: | 
-          export LD_LIBRARY_PATH=$CONDA/lib/:$LD_LIBRARY_PATH
-          export PDOC_ALLOW_EXEC=1
       - name: Install package
         run: $CONDA/bin/pip install -e .
-
-      - run: $CONDA/bin/pdoc -o docs/ basketballtrainer
+      - name: Build docs
+        run: |
+          export LD_LIBRARY_PATH=$CONDA/lib/:$LD_LIBRARY_PATH
+          export PDOC_ALLOW_EXEC=1
+          $CONDA/bin/pdoc -o docs/ basketballtrainer
       - uses: actions/upload-pages-artifact@v2
         with:
           path: docs/
