@@ -76,7 +76,7 @@ To train the BasketballDetector segmentation model, run:
 ```shell
 export CUDA_VISIBLE_DEVICES=0
 python PaddleSeg/tools/train.py \
---configs configs/pp_liteseg_base_stdc1_basketballdetector_1024x512.yml \
+--configs configs/pp_liteseg_base_stdc1_ohem_1024x512.yml \
 --do_eval \
 --use_vdl \
 --save_interval 5000 \
@@ -92,7 +92,7 @@ can be found [here](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.8/d
 To evaluate the obtained model, run:
 ```shell
 python PaddleSeg/tools/val.py \
---configs basketballdetector/configs/pp_liteseg_base_stdc1_basketballdetector_1024x512.yml \
+--configs basketballdetector/configs/pp_liteseg_base_stdc1_ohem_1024x512.yml \
 --model_path output/best_model/model.pdparams
 ```
 
@@ -111,7 +111,7 @@ In the following table you can find the summarized results of the obtained model
 
 | Model        | Backbone | Random Crops | Train  Resolution | Test  Resolution | Training Iters | mIoU   | Ball Class IoU | Links                                                                                    |
 |--------------|----------|--------------|-------------------|------------------|----------------|--------|----------------|------------------------------------------------------------------------------------------|
-| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 160000         | 0.8232 | 0.6466         | [config](configs/pp_liteseg_base_stdc1_basketballdetector_1024x512.yml) model log vdl    |
+| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 160000         | 0.8232 | 0.6466         | [config](configs/pp_liteseg_base_stdc1_ohem_1024x512.yml) model log vdl    |
 | PP-LiteSeg-T | STDC1    | 1            | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                                     |
 | PP-LiteSeg-T | STDC1    | 2            | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                                     |
 | PP-LiteSeg-T | STDC1    | 5            | 1024x512          | 2048x1024        | 160000         |        |                | [config](configs/pp_liteseg_rancrop_stdc1_basketballdetector_1024x512.yml) model log vdl | 

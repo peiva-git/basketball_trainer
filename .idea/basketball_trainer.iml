@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/output" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.9 (basketball-detector-pp)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (pp-gpu)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
