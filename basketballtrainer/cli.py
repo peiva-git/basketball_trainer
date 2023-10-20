@@ -4,7 +4,7 @@ from paddleseg.models import PPLiteSeg
 from paddleseg.models.backbones import STDC1
 
 from .models import PPLiteSegRandomCrops
-from .train import train_model
+from .tasks.train import train_model
 
 
 def train_model_command():
