@@ -13,6 +13,7 @@ from paddleseg.core import train
 
 def train_model(model: paddle.nn.Layer, dataset_root: str):
     train_transforms = [
+        t.Resize(target_size=[1024, 512]),
         t.ResizeStepScaling(min_scale_factor=0.5, max_scale_factor=2.0, scale_step_size=0.25),
         t.RandomPaddingCrop(crop_size=[1024, 512]),
         t.RandomHorizontalFlip(),
@@ -20,6 +21,7 @@ def train_model(model: paddle.nn.Layer, dataset_root: str):
         t.Normalize()
     ]
     val_transforms = [
+        t.Resize(target_size=[2048, 1024]),
         t.Normalize()
     ]
 

@@ -11,9 +11,9 @@ the frame and mask indexes (the last integer in the filename).
 
 import argparse
 import glob
+import os.path
 import pathlib
-
-import cv2 as cv
+import shutil
 
 
 def convert_dataset_to_paddleseg_format(dataset_path: str, target_path: str):
@@ -27,14 +27,14 @@ def convert_dataset_to_paddleseg_format(dataset_path: str, target_path: str):
     source = pathlib.Path(dataset_path)
     target = pathlib.Path(target_path)
     images, labels = __generate_ordered_filenames_lists(source)
+    if not os.path.exists(str(target / 'images')):
+        os.mkdir(str(target / 'images'))
+    if not os.path.exists(str(target / 'labels')):
+        os.mkdir(str(target / 'labels'))
 
     for sample_index in range(len(images)):
-        image = cv.imread(images[sample_index])
-        label = cv.imread(labels[sample_index])
-        resized_image = cv.resize(image, (1024, 512))
-        resized_label = cv.resize(label, (1024, 512))
-        cv.imwrite(str(target / f'images/image{sample_index + 1}.png'), resized_image)
-        cv.imwrite(str(target / f'labels/label{sample_index + 1}.png'), resized_label)
+        shutil.copy2(images[sample_index], str(target / f'images/image{sample_index + 1}.png'))
+        shutil.copy2(labels[sample_index], str(target / f'labels/label{sample_index + 1}.png'))
 
 
 def __generate_ordered_filenames_lists(source: pathlib.Path) -> ([str], [str]):

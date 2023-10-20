@@ -8,6 +8,8 @@ train_dataset:
   num_classes: 2
   mode: train
   transforms:
+    - type: Resize
+      target_size: [1024, 512]
     - type: ResizeStepScaling
       min_scale_factor: 0.5
       max_scale_factor: 2.0
@@ -28,6 +30,8 @@ val_dataset:
   num_classes: 2
   mode: val
   transforms:
+    - type: Resize
+      target_size: [2048, 1024]
     - type: Normalize
 
 test_config:
