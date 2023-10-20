@@ -102,20 +102,20 @@ For additional options refer to the
 ## Results
 
 The following results have been obtained by training a model with
-[this configuration](configs/pp_liteseg_rancrop_stdc1_basketballdetector_1024x512.yml),
+[this configuration](configs/pp_liteseg_rancrop_stdc1_ohem_1024x512.yml),
 using the tools provided by [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.8/docs/train/train.md),
 with different values of the `random_crops` parameter.
 The first row represents the base PPLiteSeg model with no modifications.
 
 In the following table you can find the summarized results of the obtained model.
 
-| Model        | Backbone | Random Crops | Train  Resolution | Test  Resolution | Training Iters | mIoU   | Ball Class IoU | Links                                                                                    |
-|--------------|----------|--------------|-------------------|------------------|----------------|--------|----------------|------------------------------------------------------------------------------------------|
-| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 160000         | 0.8232 | 0.6466         | [config](configs/pp_liteseg_base_stdc1_ohem_1024x512.yml) model log vdl                  |
-| PP-LiteSeg-T | STDC1    | 1            | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                                     |
-| PP-LiteSeg-T | STDC1    | 2            | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                                     |
-| PP-LiteSeg-T | STDC1    | 5            | 1024x512          | 2048x1024        | 160000         |        |                | [config](configs/pp_liteseg_rancrop_stdc1_basketballdetector_1024x512.yml) model log vdl | 
-| PP-LiteSeg-T | STDC1    | 10           | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                                     |
+| Model        | Backbone | Random Crops | Train  Resolution | Test  Resolution | Training Iters | mIoU   | Ball Class IoU | Links                                                                      |
+|--------------|----------|--------------|-------------------|------------------|----------------|--------|----------------|----------------------------------------------------------------------------|
+| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 160000         | 0.8232 | 0.6466         | [config](configs/pp_liteseg_base_stdc1_ohem_1024x512.yml) model log vdl    |
+| PP-LiteSeg-T | STDC1    | 1            | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                       |
+| PP-LiteSeg-T | STDC1    | 2            | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                       |
+| PP-LiteSeg-T | STDC1    | 5            | 1024x512          | 2048x1024        | 160000         |        |                | [config](configs/pp_liteseg_rancrop_stdc1_ohem_1024x512.yml) model log vdl | 
+| PP-LiteSeg-T | STDC1    | 10           | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                       |
 
 ## Credits
 
