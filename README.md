@@ -109,13 +109,13 @@ The first row represents the base PPLiteSeg model with no modifications.
 
 In the following table you can find the summarized results of the obtained model.
 
-| Model        | Backbone | Random Crops | Train  Resolution | Test  Resolution | Training Iters | mIoU   | Ball Class IoU | Links                                                                      |
-|--------------|----------|--------------|-------------------|------------------|----------------|--------|----------------|----------------------------------------------------------------------------|
-| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 160000         | 0.8232 | 0.6466         | [config](configs/pp_liteseg_base_stdc1_ohem_1024x512.yml) model log vdl    |
-| PP-LiteSeg-T | STDC1    | 1            | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                       |
-| PP-LiteSeg-T | STDC1    | 2            | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                       |
-| PP-LiteSeg-T | STDC1    | 5            | 1024x512          | 2048x1024        | 160000         |        |                | [config](configs/pp_liteseg_rancrop_stdc1_ohem_1024x512.yml) model log vdl | 
-| PP-LiteSeg-T | STDC1    | 10           | 1024x512          | 2048x1024        | 160000         |        |                | config model log vdl                                                       |
+| Model        | Backbone | Random Crops | Train  Resolution | Test  Resolution | Training Iters | Ball class IoU | Ball class Precision | Ball class Recall | Kappa  | Dice   | Links                                                                      |
+|--------------|----------|--------------|-------------------|------------------|----------------|----------------|----------------------|-------------------|--------|--------|----------------------------------------------------------------------------|
+| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 50000          | 0.6542         | 0.909                | 0.7               | 0.7909 | 0.8954 | [config](configs/pp_liteseg_base_stdc1_ohem_1024x512.yml) model log vdl    |
+| PP-LiteSeg-T | STDC1    | 1            | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | config model log vdl                                                       |
+| PP-LiteSeg-T | STDC1    | 2            | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | config model log vdl                                                       |
+| PP-LiteSeg-T | STDC1    | 5            | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | [config](configs/pp_liteseg_rancrop_stdc1_ohem_1024x512.yml) model log vdl | 
+| PP-LiteSeg-T | STDC1    | 10           | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | config model log vdl                                                       |
 
 ## Credits
 

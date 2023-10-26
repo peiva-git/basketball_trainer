@@ -1,5 +1,5 @@
 batch_size: 4
-iters: 50000 # ~ 200 epochs for 1670 training images
+iters: 50000 # ~ 200 epochs for 1002 training images
 
 train_dataset:
   type: Dataset
