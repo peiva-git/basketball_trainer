@@ -31,7 +31,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                  resize_mode='bilinear',
                  pretrained=None,
                  random_crops: int = None,
-                 crop_ratio: float = 0.8):
+                 crop_ratio: float = 0.97):
         """
         This constructor initializes a PPLiteSeg model with the same default parameters as the base class.
         Only the :param random_crops and :param crop_ratio parameters are specific to this model.
