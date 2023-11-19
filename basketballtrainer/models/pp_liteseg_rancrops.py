@@ -83,8 +83,8 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                 random_crops = self.generate_random_crops(x)
                 # 2. use super().forward to calculate logits for each random crop
                 logit_tensors = [
-                    # the super().forward() method generates a list of 4-D tensors, but since self.training == False
-                    # that list has only one element
+                    # the super().forward() method generates a list of 4-D tensors
+                    # it's not clear why, but the paddleseg.core.infer.inference function chooses the first element
                     super(PPLiteSegRandomCrops, self).forward(random_crop)[0]
                     for random_crop in random_crops
                 ]
