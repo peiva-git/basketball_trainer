@@ -36,7 +36,7 @@ def evaluate_base_model(dataset_root: str, model_file: str):
     It is equivalent to evaluating the model using the tools provided by PaddleSeg along with the configuration file.
     :param dataset_root: Root directory of the training dataset, formatted using the [PaddleSeg specification](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.9/docs/data/custom/data_prepare.md).
     :param model_file: Model file obtained after training
-    :return:
+    :return: None
     """
     dataset = __prepare_dataset(dataset_root)
     model_path = pathlib.Path(model_file)
@@ -57,11 +57,13 @@ def evaluate_base_model(dataset_root: str, model_file: str):
 
 def evaluate_rancrops_model(dataset_root: str, model_file: str, random_crops: int):
     """
-
-    :param dataset_root:
-    :param model_file:
-    :param random_crops:
-    :return:
+    This function employs the same validation parameters used in the base model configuration published in this project's
+    [repository](https://github.com/peiva-git/basketball_trainer/blob/master/configs/pp_liteseg_rancrop1_stdc1_ohem_1024x512.yml).
+    It is equivalent to evaluating the model using the tools provided by PaddleSeg along with the configuration file.
+    :param dataset_root: Root directory of the training dataset, formatted using the [PaddleSeg specification](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.9/docs/data/custom/data_prepare.md).
+    :param model_file: Model file obtained after training
+    :param random_crops: Number of random crops the model should use
+    :return: None
     """
     dataset = __prepare_dataset(dataset_root)
     model_path = pathlib.Path(model_file)
