@@ -38,7 +38,8 @@ def evaluate_model_command():
         '--random_crops',
         help='Number of random crops to use for the extended model',
         type=int,
-        required=False
+        required=False,
+        default=2
     )
     args = parser.parse_args()
     if args.model_type == 'base':
