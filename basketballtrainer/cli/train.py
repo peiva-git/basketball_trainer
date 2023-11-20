@@ -40,6 +40,10 @@ def train_model_command():
         )
         train_model(model, args.dataset_root)
     else:
+        if args.random_crops < 1:
+            raise ValueError(
+                f'The number of random crops has to be a positive integer, but instead {args.random_crops} was given'
+            )
         model = PPLiteSegRandomCrops(
             num_classes=2,
             backbone=STDC1(pretrained='https://bj.bcebos.com/paddleseg/dygraph/PP_STDCNet1.tar.gz'),

@@ -47,7 +47,6 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         :param resize_mode: The resize mode for the upsampling operation in the decoder
         :param pretrained: Pretrained model path
         :param random_crops: The number of random crops to use during inference time
-        The first random crop size is computed as `(crop_h, crop_w) = (img_h * crop_ratio, img_w * crop_ratio)`.
         """
         super(PPLiteSegRandomCrops, self).__init__(
             num_classes=num_classes,
@@ -97,7 +96,8 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         All the crops have the same shape as the original image, with added padding values where needed.
         The used padding value is 0.
         Zero was chosen since the normalization preprocessing step maps all 127.5 pixel values in the original image
-        exactly to 0.
+        exactly to 0 (see the [`paddleseg.transforms.normalize` functional source code](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.9/paddleseg/transforms/functional.py#L34)),
+        and 127.5 is the default value used for padding in `paddleseg`.
         :param input_image_batch: A tensor of shape N x C x H x W
         :param first_crop_ratio: Size of the first random crop, specified as a ratio of the original image size
         :return: The generated random crops, a list of N x C x H x W shaped tensors
