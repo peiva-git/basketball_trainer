@@ -66,6 +66,7 @@ lr_scheduler:
 
 model:
   type: PPLiteSegRandomCrops
+  pretrained: /home/peiva/output 3/output_2/best_model/model.pdparams
   num_classes: 2
   backbone:
     type: STDC1
