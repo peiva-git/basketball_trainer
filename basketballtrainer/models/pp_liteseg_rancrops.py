@@ -122,13 +122,13 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             )
         ))
         # then generate random crops similar (IoU > 0.9) to the first one
-        variance_x = int((image_width - first_crop_width) / 4)
-        variance_y = int((image_height - first_crop_height) / 4)
+        delta_x = int(0.05 * first_crop_width)
+        delta_y = int(0.05 * first_crop_height)
         for _ in range(1, self.__random_crops):
-            x = random.randint(first_crop_x - variance_x, first_crop_x + variance_x)
-            y = random.randint(first_crop_y - variance_y, first_crop_y + variance_y)
-            crop_width = random.randint(first_crop_width - variance_x, first_crop_width + variance_x)
-            crop_height = random.randint(first_crop_height - variance_y, first_crop_height + variance_y)
+            x = random.randint(first_crop_x - delta_x, first_crop_x + delta_x)
+            y = random.randint(first_crop_y - delta_y, first_crop_y + delta_y)
+            crop_width = random.randint(first_crop_width - delta_x, first_crop_width + delta_x)
+            crop_height = random.randint(first_crop_height - delta_y, first_crop_height + delta_y)
             crops.append((
                 max(0, x),
                 max(0, y),
