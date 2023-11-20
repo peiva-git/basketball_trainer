@@ -43,7 +43,7 @@ def evaluate_base_model(dataset_root: str, model_file: str):
     )
 
 
-def evaluate_rancrops_model(dataset_root: str, model_file: str, random_crops: int, first_crop_ratio: float):
+def evaluate_rancrops_model(dataset_root: str, model_file: str, random_crops: int):
     dataset = __prepare_dataset(dataset_root)
     model_path = pathlib.Path(model_file)
     model = PPLiteSegRandomCrops(
@@ -52,8 +52,7 @@ def evaluate_rancrops_model(dataset_root: str, model_file: str, random_crops: in
         pretrained=str(model_path),
         arm_out_chs=[32, 64, 128],
         seg_head_inter_chs=[32, 64, 128],
-        random_crops=random_crops,
-        crop_ratio=first_crop_ratio
+        random_crops=random_crops
     )
     evaluate(
         model=model,

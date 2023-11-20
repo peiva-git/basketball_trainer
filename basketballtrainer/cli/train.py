@@ -1,3 +1,7 @@
+"""
+This module contains all the functions used to train the implemented models using the Command Line Interface.
+"""
+
 import argparse
 
 from paddleseg.models import PPLiteSeg
@@ -8,6 +12,12 @@ from basketballtrainer.tasks.train import train_model
 
 
 def train_model_command():
+    """
+    This function is used as an entry point for the train command used by the `basketballtrainer` package.
+    For a usage example, take a look [here](basketballtrainer.cli).
+    The accepted command line arguments are `--model_type`, `--dataset_root` and `--random_crops`.
+    :return: None
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--model_type',
