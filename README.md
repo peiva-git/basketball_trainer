@@ -74,7 +74,6 @@ pip install -v -e .
 
 To train the BasketballDetector segmentation model, run:
 ```shell
-export CUDA_VISIBLE_DEVICES=0
 python PaddleSeg/tools/train.py \
 --configs configs/pp_liteseg_base_stdc1_ohem_1024x512.yml \
 --do_eval \
@@ -92,7 +91,7 @@ can be found [here](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.8/d
 To evaluate the obtained model, run:
 ```shell
 python PaddleSeg/tools/val.py \
---configs basketballdetector/configs/pp_liteseg_base_stdc1_ohem_1024x512.yml \
+--configs configs/pp_liteseg_base_stdc1_ohem_1024x512.yml \
 --model_path output/best_model/model.pdparams
 ```
 
@@ -102,7 +101,7 @@ For additional options refer to the
 ## Results
 
 The following results have been obtained by training a model with
-[this configuration](configs/pp_liteseg_rancrop5_stdc1_ohem_1024x512.yml),
+[these configurations](configs),
 using the tools provided by [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.8/docs/train/train.md),
 with different values of the `random_crops` parameter.
 The first row represents the base PPLiteSeg model with no modifications.
@@ -121,3 +120,6 @@ In the following table you can find the summarized results of the obtained model
 
 This project uses the [PaddleSeg toolbox](https://github.com/PaddlePaddle/PaddleSeg). All credits go to its authors.
 This project uses [pdoc](https://pdoc.dev/) to generate its documentation. All credits go to its authors.
+The implemented model takes inspiration from the paper
+[Real-time CNN-based Segmentation Architecture for Ball Detection in a Single View Setup](https://arxiv.org/abs/2007.11876).
+All credits go to its authors.
