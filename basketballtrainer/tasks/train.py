@@ -1,3 +1,7 @@
+"""
+This module contains all the training parameters and functions.
+"""
+
 import pathlib
 
 import paddle.nn
@@ -11,15 +15,42 @@ from paddleseg.datasets import Dataset
 from paddleseg.core import train
 
 iterations = 50000
+"""
+Number of training iterations. For a dataset with ~1000 training images and a batch size of 4,
+this means approximately 200 epochs.
+"""
 batch_size = 4
+"""
+Iteration batch size.
+"""
 train_img_size = (1024, 512)
+"""
+Training image target size.
+"""
 test_img_size = (2048, 1024)
+"""
+Validation image target size.
+"""
 # keeping all checkpoints
 save_interval = 2500
+"""
+Model evaluation and saving interval, in iterations.
+"""
 max_checkpoints = 20
+"""
+Max number of saved models to keep.
+"""
 
 
 def train_model(model: paddle.nn.Layer, dataset_root: str):
+    """
+    This function employs the same parameters used in the base model training configuration published in this project's
+    [repository](https://github.com/peiva-git/basketball_trainer/blob/master/configs/pp_liteseg_base_stdc1_ohem_1024x512.yml).
+    It is equivalent to training the model using the tools provided by PaddleSeg along with the configuration file.
+    :param model: The model to train
+    :param dataset_root: Root directory of the training dataset, formatted using the [PaddleSeg specification](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.9/docs/data/custom/data_prepare.md).
+    :return: None
+    """
     train_transforms = [
         t.Resize(target_size=train_img_size),
         t.ResizeStepScaling(min_scale_factor=0.5, max_scale_factor=2.0, scale_step_size=0.25),

@@ -1,3 +1,7 @@
+"""
+This module contains all the validation parameters and functions.
+"""
+
 import pathlib
 
 from paddleseg.datasets import Dataset
@@ -26,6 +30,14 @@ def __prepare_dataset(dataset_root: str):
 
 
 def evaluate_base_model(dataset_root: str, model_file: str):
+    """
+    This function employs the same validation parameters used in the base model configuration published in this project's
+    [repository](https://github.com/peiva-git/basketball_trainer/blob/master/configs/pp_liteseg_base_stdc1_ohem_1024x512.yml).
+    It is equivalent to evaluating the model using the tools provided by PaddleSeg along with the configuration file.
+    :param dataset_root: Root directory of the training dataset, formatted using the [PaddleSeg specification](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.9/docs/data/custom/data_prepare.md).
+    :param model_file: Model file obtained after training
+    :return:
+    """
     dataset = __prepare_dataset(dataset_root)
     model_path = pathlib.Path(model_file)
     model = PPLiteSeg(
@@ -44,6 +56,13 @@ def evaluate_base_model(dataset_root: str, model_file: str):
 
 
 def evaluate_rancrops_model(dataset_root: str, model_file: str, random_crops: int):
+    """
+
+    :param dataset_root:
+    :param model_file:
+    :param random_crops:
+    :return:
+    """
     dataset = __prepare_dataset(dataset_root)
     model_path = pathlib.Path(model_file)
     model = PPLiteSegRandomCrops(

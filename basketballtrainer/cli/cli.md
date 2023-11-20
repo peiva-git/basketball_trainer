@@ -29,6 +29,3 @@ evalutate \
 --model_file /home/ubuntu/model.pdparams \
 --dataset_root /mnt/data/dataset
 ```
-
-Most of the training and evaluation parameters are left unspecified on purpose: all the employed values are visible
-in the [training](../tasks/train.py) and [evaluation](../tasks/val.py) scripts.
