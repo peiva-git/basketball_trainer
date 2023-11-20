@@ -102,20 +102,20 @@ For additional options refer to the
 ## Results
 
 The following results have been obtained by training a model with
-[this configuration](configs/pp_liteseg_rancrop_stdc1_ohem_1024x512.yml),
+[this configuration](configs/pp_liteseg_rancrop5_stdc1_ohem_1024x512.yml),
 using the tools provided by [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.8/docs/train/train.md),
 with different values of the `random_crops` parameter.
 The first row represents the base PPLiteSeg model with no modifications.
 
 In the following table you can find the summarized results of the obtained model.
 
-| Model        | Backbone | Random Crops | Train  Resolution | Test  Resolution | Training Iters | Ball class IoU | Ball class Precision | Ball class Recall | Kappa  | Dice   | Links                                                                      |
-|--------------|----------|--------------|-------------------|------------------|----------------|----------------|----------------------|-------------------|--------|--------|----------------------------------------------------------------------------|
-| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 50000          | 0.6542         | 0.909                | 0.7               | 0.7909 | 0.8954 | [config](configs/pp_liteseg_base_stdc1_ohem_1024x512.yml) model log vdl    |
-| PP-LiteSeg-T | STDC1    | 1            | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | config model log vdl                                                       |
-| PP-LiteSeg-T | STDC1    | 2            | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | config model log vdl                                                       |
-| PP-LiteSeg-T | STDC1    | 5            | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | [config](configs/pp_liteseg_rancrop_stdc1_ohem_1024x512.yml) model log vdl | 
-| PP-LiteSeg-T | STDC1    | 10           | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | config model log vdl                                                       |
+| Model        | Backbone | Random Crops | Train  Resolution | Test  Resolution | Training Iters | Ball class IoU | Ball class Precision | Ball class Recall | Kappa  | Dice   | Links                                                                        |
+|--------------|----------|--------------|-------------------|------------------|----------------|----------------|----------------------|-------------------|--------|--------|------------------------------------------------------------------------------|
+| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 50000          | 0.6542         | 0.909                | 0.7               | 0.7909 | 0.8954 | [config](configs/pp_liteseg_base_stdc1_ohem_1024x512.yml) model log vdl      |
+| PP-LiteSeg-T | STDC1    | 1            | 1024x512          | 2048x1024        | 50000          | 0.6261         | 0.9139               | 0.6654            | 0.7700 | 0.8850 | [config](configs/pp_liteseg_rancrop1_stdc1_ohem_1024x512.yml) model log vdl  |
+| PP-LiteSeg-T | STDC1    | 2            | 1024x512          | 2048x1024        | 50000          | 0.625          | 0.9145               | 0.6638            | 0.7692 | 0.8846 | [config](configs/pp_liteseg_rancrop2_stdc1_ohem_1024x512.yml) model log vdl  |
+| PP-LiteSeg-T | STDC1    | 5            | 1024x512          | 2048x1024        | 50000          | 0.6234         | 0.9147               | 0.6619            | 0.7680 | 0.8840 | [config](configs/pp_liteseg_rancrop5_stdc1_ohem_1024x512.yml) model log vdl  | 
+| PP-LiteSeg-T | STDC1    | 10           | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | [config](configs/pp_liteseg_rancrop10_stdc1_ohem_1024x512.yml) model log vdl |
 
 ## Credits
 
