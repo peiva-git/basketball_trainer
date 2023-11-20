@@ -8,7 +8,7 @@ The model can be trained in two different ways:
 [configuration files](https://github.com/peiva-git/basketball_trainer/tree/master/configs).
 A detailed description with examples is available
 on [this project's public repository](https://github.com/peiva-git/basketball_trainer).
-2. Using the implemented terminal commands. More details are specified in the `basketballtrainer.cli` module.
+2. Using the implemented terminal commands. More details are specified in the `basketballtrainer.cli` package.
 
 In both cases, the result of the training should be a `model.pdparams` file,
 required by the `basketballdetector` package.
