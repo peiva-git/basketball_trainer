@@ -150,7 +150,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                     crop_y,
                     image_height - crop_y - pp.shape(crop).numpy()[2]
                 ),
-                value=127.5
+                value=0
             )
             for crop_x, crop_y, crop in crops
         ]
