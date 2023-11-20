@@ -96,6 +96,8 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         This method generates the random crops from a given batch of input images.
         All the crops have the same shape as the original image, with added padding values where needed.
         The used padding value is 0.
+        Zero was chosen since the normalization preprocessing step maps all 127.5 pixel values in the original image
+        exactly to 0.
         :param input_image_batch: A tensor of shape N x C x H x W
         :param first_crop_ratio: Size of the first random crop, specified as a ratio of the original image size
         :return: The generated random crops, a list of N x C x H x W shaped tensors
