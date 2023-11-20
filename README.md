@@ -115,7 +115,7 @@ In the following table you can find the summarized results of the obtained model
 | PP-LiteSeg-T | STDC1    | 1            | 1024x512          | 2048x1024        | 50000          | 0.6261         | 0.9139               | 0.6654            | 0.7700 | 0.8850 | [config](configs/pp_liteseg_rancrop1_stdc1_ohem_1024x512.yml) model log vdl  |
 | PP-LiteSeg-T | STDC1    | 2            | 1024x512          | 2048x1024        | 50000          | 0.625          | 0.9145               | 0.6638            | 0.7692 | 0.8846 | [config](configs/pp_liteseg_rancrop2_stdc1_ohem_1024x512.yml) model log vdl  |
 | PP-LiteSeg-T | STDC1    | 5            | 1024x512          | 2048x1024        | 50000          | 0.6234         | 0.9147               | 0.6619            | 0.7680 | 0.8840 | [config](configs/pp_liteseg_rancrop5_stdc1_ohem_1024x512.yml) model log vdl  | 
-| PP-LiteSeg-T | STDC1    | 10           | 1024x512          | 2048x1024        | 50000          |                |                      |                   |        |        | [config](configs/pp_liteseg_rancrop10_stdc1_ohem_1024x512.yml) model log vdl |
+| PP-LiteSeg-T | STDC1    | 10           | 1024x512          | 2048x1024        | 50000          | 0.6221         | 0.9148               | 0.6604            | 0.7670 | 0.8835 | [config](configs/pp_liteseg_rancrop10_stdc1_ohem_1024x512.yml) model log vdl |
 
 ## Credits
 
