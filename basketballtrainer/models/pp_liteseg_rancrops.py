@@ -30,8 +30,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                  seg_head_inter_chs=(64, 64, 64),
                  resize_mode='bilinear',
                  pretrained=None,
-                 random_crops: int = None,
-                 crop_ratio: float = 0.9):
+                 random_crops: int = None):
         """
         This constructor initializes a PPLiteSeg model with the same default parameters as the base class.
         Only the :param random_crops and :param crop_ratio parameters are specific to this model.
@@ -48,7 +47,6 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         :param resize_mode: The resize mode for the upsampling operation in the decoder
         :param pretrained: Pretrained model path
         :param random_crops: The number of random crops to use during inference time
-        :param crop_ratio: Percentage of the input image size to be used as the first crop size.
         The first random crop size is computed as `(crop_h, crop_w) = (img_h * crop_ratio, img_w * crop_ratio)`.
         """
         super(PPLiteSegRandomCrops, self).__init__(
@@ -64,7 +62,6 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             pretrained=pretrained
         )
         self.__random_crops = random_crops
-        self.__first_crop_ratio = crop_ratio
 
     def forward(self, x):
         """
@@ -94,17 +91,18 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             else:
                 return super(PPLiteSegRandomCrops, self).forward(x)
 
-    def generate_random_crops(self, input_image_batch: pp.Tensor) -> list[pp.Tensor]:
+    def generate_random_crops(self, input_image_batch: pp.Tensor, first_crop_ratio: float = 0.9) -> list[pp.Tensor]:
         """
         This method generates the random crops from a given batch of input images.
         All the crops have the same shape as the original image, with added padding values where needed.
-        The default padding value is 127.5.
+        The used padding value is 0.
         :param input_image_batch: A tensor of shape N x C x H x W
+        :param first_crop_ratio: Size of the first random crop, specified as a ratio of the original image size
         :return: The generated random crops, a list of N x C x H x W shaped tensors
         """
         image_height, image_width = pp.shape(input_image_batch)[2:]
-        first_crop_height = int(self.__first_crop_ratio * image_height.numpy())
-        first_crop_width = int(self.__first_crop_ratio * image_width.numpy())
+        first_crop_height = int(first_crop_ratio * image_height.numpy())
+        first_crop_width = int(first_crop_ratio * image_width.numpy())
         crops = []
         # first crop at a random location, with the specified size
         first_max_x = image_width - first_crop_width
