@@ -1,3 +1,7 @@
+"""
+This module contains utility functions, useful for visualization and debugging.
+"""
+
 import paddle as pp
 
 from PIL import Image
@@ -6,17 +10,15 @@ from paddleseg.models.backbones import STDC1
 from .models import PPLiteSegRandomCrops
 
 
-def visualize_random_crops(image: pp.Tensor, number_of_crops: int, crop_ratio: float):
+def visualize_random_crops(image: pp.Tensor, number_of_crops: int):
     """
     Visualize all the random crops produced by the `basketballtrainer.models.pp_liteseg_rancrops.PPLiteSegRandomCrops`
     model.
     :param image: The input image fed to the model. The data format is assumed to be HWC.
     :param number_of_crops: The number of crops the model should produce for each prediction during inference
-    :param crop_ratio: This ratio will be multiplied with the image height and width
-    to obtain the random crop's height and width
     :return: None
     """
-    model = PPLiteSegRandomCrops(num_classes=2, backbone=STDC1(), random_crops=number_of_crops, crop_ratio=crop_ratio)
+    model = PPLiteSegRandomCrops(num_classes=2, backbone=STDC1(), random_crops=number_of_crops)
     image_batch = pp.cast(image, pp.float32)
     image_batch = pp.moveaxis(image_batch, source=-1, destination=0)
     image_batch = pp.unsqueeze(image_batch, axis=0)
