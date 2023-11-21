@@ -18,6 +18,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
     """
     __random_crops: int
     __first_crop_ratio: float
+    __detection_threshold: float = 0.01
 
     def __init__(self,
                  num_classes: int,
@@ -61,6 +62,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             pretrained=pretrained
         )
         self.__random_crops = random_crops
+        self.__num_classes = num_classes
 
     def forward(self, x):
         """
@@ -84,9 +86,30 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                     super(PPLiteSegRandomCrops, self).forward(random_crop)[0]
                     for random_crop in random_crops
                 ]
+                # discard background channel and apply softmax
+                softmax_tensors = [
+                    pp.nn.functional.softmax(logit[:, 1, :, :])
+                    for logit in logit_tensors
+                ]
                 # 3. aggregate
-                result = pp.mean(pp.to_tensor(logit_tensors), axis=0)
-                return [result]
+                softmax_aggregation = pp.mean(pp.to_tensor(softmax_tensors), axis=0)
+                # 4. apply detection rule
+                # Since a two-channel output is expected,
+                # a properly generated background channel needs to be re-introduced
+                foreground = pp.where(softmax_aggregation > self.__detection_threshold, 1, 0)
+                background = pp.where(softmax_aggregation <= self.__detection_threshold, 1, 0)
+                softmax_aggregation = pp.expand(
+                    softmax_aggregation,
+                    shape=(
+                        softmax_aggregation.shape[0],
+                        self.__num_classes,
+                        softmax_aggregation.shape[1],
+                        softmax_aggregation.shape[2]
+                    )
+                )
+                softmax_aggregation[:, 0, :, :] = background.astype('float32')
+                softmax_aggregation[:, 1, :, :] = foreground.astype('float32')
+                return [softmax_aggregation]
             else:
                 return super(PPLiteSegRandomCrops, self).forward(x)
 
