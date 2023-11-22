@@ -5,6 +5,7 @@ channels:
   - defaults
 dependencies:
   - python=3.9
+  - pip
   - cudatoolkit=10.2
   - paddlepaddle-gpu==2.5.1
   - pip:
