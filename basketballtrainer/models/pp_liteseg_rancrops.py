@@ -83,16 +83,37 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                 logit_tensors = [
                     # the super().forward() method generates a list of 4-D tensors
                     # it's not clear why, but the paddleseg.core.infer.inference function chooses the first element
-                    super(PPLiteSegRandomCrops, self).forward(random_crop)[0]
-                    for random_crop in random_crops
+                    (
+                        super(PPLiteSegRandomCrops, self).forward(random_crop)[0],
+                        crop_x,
+                        crop_y
+                    )
+                    for random_crop, crop_x, crop_y in random_crops
                 ]
                 # discard background channel and apply softmax
                 softmax_tensors = [
-                    pp.nn.functional.softmax(logit[:, 1, :, :])
-                    for logit in logit_tensors
+                    (
+                        pp.nn.functional.softmax(logit[:, 1, :, :]),
+                        logit_x,
+                        logit_y
+                    )
+                    for logit, logit_x, logit_y in logit_tensors
                 ]
-                # 3. aggregate
-                softmax_aggregation = pp.mean(pp.to_tensor(softmax_tensors), axis=0)
+                # 3. pad and aggregate
+                softmax_tensors_padded = [
+                    pp.nn.functional.pad(
+                        softmax,
+                        pad=(
+                            softmax_x,
+                            pp.shape(x).numpy()[3] - softmax_x - pp.shape(softmax).numpy()[3],
+                            softmax_y,
+                            pp.shape(x).numpy()[2] - softmax_y - pp.shape(softmax).numpy()[2]
+                        ),
+                        value=pp.min(softmax)
+                    )
+                    for softmax, softmax_x, softmax_y in softmax_tensors
+                ]
+                softmax_aggregation = pp.mean(pp.to_tensor(softmax_tensors_padded), axis=0)
                 # 4. apply detection rule
                 # Since a two-channel output is expected,
                 # a properly generated background channel needs to be re-introduced
@@ -113,7 +134,9 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             else:
                 return super(PPLiteSegRandomCrops, self).forward(x)
 
-    def generate_random_crops(self, input_image_batch: pp.Tensor, first_crop_ratio: float = 0.9) -> list[pp.Tensor]:
+    def generate_random_crops(self,
+                              input_image_batch: pp.Tensor,
+                              first_crop_ratio: float = 0.9) -> list[(pp.Tensor, int, int, int, int)]:
         """
         This method generates the random crops from a given batch of input images.
         All the crops have the same shape as the original image, with added padding values where needed.
@@ -162,18 +185,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                     ends=(min(y + crop_height, image_height), min(x + crop_width, image_width))
                 )
             ))
-        # pad crops to have a constant tensor shape
-        # crops should have the same shape as input_image
         return [
-            pp.nn.functional.pad(
-                crop,
-                pad=(
-                    crop_x,
-                    image_width - crop_x - pp.shape(crop).numpy()[3],
-                    crop_y,
-                    image_height - crop_y - pp.shape(crop).numpy()[2]
-                ),
-                value=0
-            )
+            (crop, crop_x, crop_y)
             for crop_x, crop_y, crop in crops
         ]
