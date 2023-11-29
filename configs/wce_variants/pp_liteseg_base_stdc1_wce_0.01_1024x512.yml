@@ -41,11 +41,11 @@ test_config:
 loss:
   types:
     - type: CrossEntropyLoss
-      weight: [0.99, 0.01] # the ball pixels represent ~ 0.004 of the pixels on a 1024x512 image
+      weight: [0.01, 0.99] # the ball pixels represent ~ 0.004 of the pixels on a 1024x512 image
     - type: CrossEntropyLoss
-      weight: [0.99, 0.01]
+      weight: [0.01, 0.99]
     - type: CrossEntropyLoss
-      weight: [0.99, 0.01]
+      weight: [0.01, 0.99]
   coef: [1, 1, 1]
 
 optimizer:
