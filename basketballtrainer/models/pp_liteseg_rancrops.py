@@ -93,23 +93,24 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                 # discard background channel and apply softmax
                 softmax_tensors = [
                     (
-                        pp.nn.functional.softmax(logit[:, 1, :, :]),
+                        pp.nn.functional.softmax(pp.unsqueeze(logit[:, 1, :, :], axis=1)),
                         logit_x,
                         logit_y
                     )
                     for logit, logit_x, logit_y in logit_tensors
                 ]
                 # 3. pad and aggregate
+                image_height, image_width = pp.shape(x)[2:]
                 softmax_tensors_padded = [
                     pp.nn.functional.pad(
                         softmax,
                         pad=(
                             softmax_x,
-                            pp.shape(x).numpy()[3] - softmax_x - pp.shape(softmax).numpy()[3],
+                            image_width - softmax_x - pp.shape(softmax).numpy()[3],
                             softmax_y,
-                            pp.shape(x).numpy()[2] - softmax_y - pp.shape(softmax).numpy()[2]
+                            image_height - softmax_y - pp.shape(softmax).numpy()[2]
                         ),
-                        value=pp.min(softmax)
+                        value=float(pp.min(softmax))
                     )
                     for softmax, softmax_x, softmax_y in softmax_tensors
                 ]
@@ -124,8 +125,8 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                     shape=(
                         softmax_aggregation.shape[0],
                         self.__num_classes,
-                        softmax_aggregation.shape[1],
-                        softmax_aggregation.shape[2]
+                        softmax_aggregation.shape[2],
+                        softmax_aggregation.shape[3]
                     )
                 )
                 softmax_aggregation[:, 0, :, :] = background.astype('float32')
@@ -157,6 +158,12 @@ class PPLiteSegRandomCrops(PPLiteSeg):
         first_max_y = image_height - first_crop_height
         first_crop_x = random.randint(0, first_max_x)
         first_crop_y = random.randint(0, first_max_y)
+        # append the original, un-cropped batch as well
+        crops.append((
+            0,
+            0,
+            input_image_batch
+        ))
         crops.append((
             first_crop_x,
             first_crop_y,
