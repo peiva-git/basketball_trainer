@@ -82,7 +82,8 @@ class PPLiteSegRandomCrops(PPLiteSeg):
                 # 2. use super().forward to calculate logits for each random crop
                 logit_tensors = [
                     # the super().forward() method generates a list of 4-D tensors
-                    # it's not clear why, but the paddleseg.core.infer.inference function chooses the first element
+                    # the paddleseg.core.infer.inference function chooses the first element,
+                    # there's a total of 3 since we're using 3 loss functions
                     (
                         super(PPLiteSegRandomCrops, self).forward(random_crop)[0],
                         crop_x,
