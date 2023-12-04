@@ -42,13 +42,13 @@ loss:
   types:
     - type: OhemCrossEntropyLoss
       thresh: 0.9
-      min_kept: 20000
+      min_kept: 10000
     - type: OhemCrossEntropyLoss
       thresh: 0.9
-      min_kept: 20000
+      min_kept: 10000
     - type: OhemCrossEntropyLoss
       thresh: 0.9
-      min_kept: 20000
+      min_kept: 10000
   coef: [1, 1, 1]
 
 optimizer:
