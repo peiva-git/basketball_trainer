@@ -6,8 +6,10 @@ import random
 
 import paddle as pp
 from paddleseg.models import PPLiteSeg
+from paddleseg.cvlibs import manager
 
 
+@manager.MODELS.add_component
 class PPLiteSegRandomCrops(PPLiteSeg):
     """
     This class represents an extension of the PPLiteSeg model.
