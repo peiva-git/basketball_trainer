@@ -45,7 +45,7 @@ Max number of saved models to keep.
 def train_model(model: paddle.nn.Layer, dataset_root: str):
     """
     This function employs the same parameters used in the base model training configuration published in this project's
-    [repository](https://github.com/peiva-git/basketball_trainer/blob/master/configs/pp_liteseg_base_stdc1_ohem_1024x512.yml).
+    [repository](https://github.com/peiva-git/basketball_trainer/blob/master/configs/pp_liteseg_base_stdc1_ohem_10000_1024x512.yml).
     It is equivalent to training the model using the tools provided by PaddleSeg along with the configuration file.
     :param model: The model to train
     :param dataset_root: Root directory of the training dataset, formatted using the [PaddleSeg specification](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.9/docs/data/custom/data_prepare.md).

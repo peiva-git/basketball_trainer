@@ -52,7 +52,8 @@ def train_model_command():
     else:
         if args.random_crops < 1:
             raise ValueError(
-                f'The number of random crops has to be a positive integer, but instead {args.random_crops} was given'
+                f'The number of random crops has to be a positive integer greater than 1, '
+                f'but instead {args.random_crops} was given'
             )
         model = PPLiteSegRandomCrops(
             num_classes=2,

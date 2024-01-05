@@ -62,7 +62,7 @@ class PPLiteSegRandomCrops(PPLiteSeg):
             resize_mode=resize_mode,
             pretrained=pretrained
         )
-        assert random_crops >= 0, 'Number of random crops should be a positive integer'
+        assert random_crops >= 1, 'Number of random crops should be a positive integer greater than 1'
         self.__random_crops = random_crops
 
     def forward(self, x):
