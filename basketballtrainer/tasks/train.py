@@ -82,7 +82,7 @@ def train_model(model: paddle.nn.Layer, dataset_root: str):
 
     # ~ 70 * 70 * batch_size "ball pixels" on each batch, assuming a margin of 20 pixels (50 + 20 = 70)
     # 70 * 70 * 4 = 19600
-    losses = {'types': [OhemCrossEntropyLoss(min_kept=20000)] * 3, 'coef': [1] * 3}
+    losses = {'types': [OhemCrossEntropyLoss(min_kept=10000, thresh=0.9)] * 3, 'coef': [1] * 3}
     base_lr = 0.005
     lr = PolynomialDecay(base_lr, power=0.9, decay_steps=iterations, end_lr=0)
     scheduler = LinearWarmup(lr, warmup_steps=1000, start_lr=1.0e-5, end_lr=base_lr)
