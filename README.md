@@ -75,7 +75,7 @@ pip install -v -e .
 To train the BasketballDetector segmentation model, run:
 ```shell
 python PaddleSeg/tools/train.py \
---configs configs/pp_liteseg_base_stdc1_ohem_1024x512.yml \
+--configs configs/pp_liteseg_base_stdc1_ohem_10000_1024x512.yml \
 --do_eval \
 --use_vdl \
 --save_interval 5000 \
@@ -91,7 +91,7 @@ can be found [here](https://github.com/PaddlePaddle/PaddleSeg/blob/release/2.8/d
 To evaluate the obtained model, run:
 ```shell
 python PaddleSeg/tools/val.py \
---configs configs/pp_liteseg_base_stdc1_ohem_1024x512.yml \
+--configs configs/pp_liteseg_base_stdc1_ohem_10000_1024x512.yml \
 --model_path output/best_model/model.pdparams
 ```
 
@@ -108,9 +108,9 @@ The first row represents the base PPLiteSeg model with no modifications.
 
 In the following table you can find the summarized results of the obtained model.
 
-| Model        | Backbone | Random Crops | Train  Resolution | Test  Resolution | Training Iters | Ball class IoU | Ball class Precision | Ball class Recall | Kappa  | Dice   | Links                                                          |
-|--------------|----------|--------------|-------------------|------------------|----------------|----------------|----------------------|-------------------|--------|--------|----------------------------------------------------------------|
-| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 50000          | 0.6542         | 0.909                | 0.7               | 0.7909 | 0.8954 | [config](configs/pp_liteseg_base_stdc1_ohem_1024x512.yml)      |
+| Model        | Backbone | Random Crops | Train  Resolution | Test  Resolution | Training Iters | Ball class IoU | Ball class Precision | Ball class Recall | Kappa  | Dice   | Links                                                                             |
+|--------------|----------|--------------|-------------------|------------------|----------------|----------------|----------------------|-------------------|--------|--------|-----------------------------------------------------------------------------------|
+| PP-LiteSeg-T | STDC1    | 0            | 1024x512          | 2048x1024        | 50000          | 0.6542         | 0.909                | 0.7               | 0.7909 | 0.8954 | [config](configs/pp_liteseg_base_stdc1_ohem_10000_1024x512.yml)                   |
 | PP-LiteSeg-T | STDC1    | 1            | 1024x512          | 2048x1024        | 50000          | 0.5561         | 0.9035               | 0.5913            | 0.7147 | 0.8574 | [config](configs/rancrop_ohem_10000/pp_liteseg_rancrop1_stdc1_ohem_1024x512.yml)  |
 | PP-LiteSeg-T | STDC1    | 2            | 1024x512          | 2048x1024        | 50000          | 0.5459         | 0.8999               | 0.5811            | 0.7062 | 0.8531 | [config](configs/rancrop_ohem_10000/pp_liteseg_rancrop2_stdc1_ohem_1024x512.yml)  |
 | PP-LiteSeg-T | STDC1    | 5            | 1024x512          | 2048x1024        | 50000          | 0.5627         | 0.9053               | 0.5979            | 0.7201 | 0.8600 | [config](configs/rancrop_ohem_10000/pp_liteseg_rancrop5_stdc1_ohem_1024x512.yml)  | 
