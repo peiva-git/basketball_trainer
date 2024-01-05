@@ -138,12 +138,12 @@ used as the base model.
 
 Various variants of the `PPLiteSegRandomCrops` model were tested, all available in [this directory](rancrop_model_variants).
 In particular, different padding and aggregation methods were used.
-All the obtained results were worse than the base PPLiteSeg model.
+All the obtained results were worse than the chosen base PPLiteSeg model.
 
 ## Credits
 
 This project uses the [PaddleSeg toolbox](https://github.com/PaddlePaddle/PaddleSeg). All credits go to its authors.
 This project uses [pdoc](https://pdoc.dev/) to generate its documentation. All credits go to its authors.
-The implemented model takes inspiration from the paper
+The implemented `PPLiteSegRandomCrops` model takes inspiration from the paper
 [Real-time CNN-based Segmentation Architecture for Ball Detection in a Single View Setup](https://arxiv.org/abs/2007.11876).
 All credits go to its authors.
