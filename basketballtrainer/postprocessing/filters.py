@@ -44,8 +44,8 @@ def evaluate_postprocessed_masks(masks_dir: pathlib.Path,
     masks = imread_collection(str(masks_dir / '*.png'))
     ground_truths = imread_collection(str(ground_truths_dir / '*.png'))
     assert len(masks) == len(ground_truths), \
-        f'Should have the same number of labels and ground truths, ' \
-        f'but got {len(masks)} labels and {len(ground_truths)} ground truths'
+        f'Should have the same number of masks and ground truths, ' \
+        f'but got {len(masks)} masks and {len(ground_truths)} ground truths'
 
     progbar = Progbar(target=len(masks), verbose=1)
     logger.info(f'Start evaluating (total_samples: {len(masks)}')
