@@ -66,7 +66,7 @@ def evaluate_postprocessed_masks(masks_dir: pathlib.Path,
         pred_area_all = pred_area_all + pred_area
         label_area_all = label_area_all + label_area
 
-        progbar.update(index)
+        progbar.update(index + 1)
 
     metrics_input = (intersect_area_all, pred_area_all, label_area_all)
     class_iou, _ = metrics.mean_iou(*metrics_input)
