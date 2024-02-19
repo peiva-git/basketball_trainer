@@ -34,9 +34,9 @@ def convert_dataset_to_paddleseg_format(dataset_path: str, target_path: str):
         os.mkdir(str(target / 'images'))
     if not os.path.exists(str(target / 'labels')):
         os.mkdir(str(target / 'labels'))
-    for sample_index in range(len(images)):
-        shutil.copy2(images[sample_index], str(target / f'images/image{sample_index + 1}.png'))
-        shutil.copy2(labels[sample_index], str(target / f'labels/label{sample_index + 1}.png'))
+    for sample_index, image, label in enumerate(zip(images, labels)):
+        shutil.copy2(image, str(target / f'images/image{sample_index + 1}.png'))
+        shutil.copy2(label, str(target / f'labels/label{sample_index + 1}.png'))
 
 
 def __generate_ordered_filenames_lists(source: pathlib.Path) -> ([str], [str]):
