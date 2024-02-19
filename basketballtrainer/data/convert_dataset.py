@@ -15,6 +15,8 @@ import os.path
 import pathlib
 import shutil
 
+import numpy as np
+
 
 def convert_dataset_to_paddleseg_format(dataset_path: str, target_path: str):
     """
@@ -75,3 +77,10 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
     convert_dataset_to_paddleseg_format(args.source_dir, args.target_dir)
+
+
+def pseudocolor_mask_to_grayscale(mask: np.ndarray) -> np.ndarray:
+    mask = np.argmax(mask, axis=-1, keepdims=False)
+    mask = mask - 2
+    mask = np.absolute(mask)
+    return mask

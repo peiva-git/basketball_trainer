@@ -4,5 +4,5 @@ For more information on the format this project's dataset,
 take a look at the `basketballtrainer.data.convert_dataset` module.
 """
 
-from .convert_dataset import convert_dataset_to_paddleseg_format
+from .convert_dataset import convert_dataset_to_paddleseg_format, pseudocolor_mask_to_grayscale
 from .dataset_builders import PaddleSegDatasetBuilder

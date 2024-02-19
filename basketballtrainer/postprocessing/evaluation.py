@@ -11,12 +11,7 @@ from paddleseg.utils import metrics
 import numpy as np
 import paddle as pp
 
-
-def pseudocolor_mask_to_grayscale(mask: np.ndarray) -> np.ndarray:
-    mask = np.argmax(mask, axis=-1, keepdims=False)
-    mask = mask - 2
-    mask = np.absolute(mask)
-    return mask
+from basketballtrainer.data import pseudocolor_mask_to_grayscale
 
 
 def postprocess_mask(mask: np.ndarray, min_size: int, max_radius: int, filters=('rm-small',)) -> np.ndarray:
@@ -28,10 +23,10 @@ def postprocess_mask(mask: np.ndarray, min_size: int, max_radius: int, filters=(
     return filtered.astype(np.int64)
 
 
-def postprocess_labels_dir(source_dir: pathlib.Path,
-                           target_dir: pathlib.Path,
-                           min_size: int = 625,
-                           max_radius: int = 19):
+def postprocess_masks_dir(source_dir: pathlib.Path,
+                          target_dir: pathlib.Path,
+                          min_size: int = 625,
+                          max_radius: int = 19):
     source_pattern = str(source_dir / '*.png')
     masks = imread_collection(source_pattern)
     for mask_index, mask in enumerate(masks):

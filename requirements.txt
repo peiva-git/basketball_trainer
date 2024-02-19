@@ -4,3 +4,4 @@ Pillow>=10.0.0
 numpy>=1.25.0
 opencv-python>=4.5.0
 pdoc==14.1.*
+scikit-image~=0.22
