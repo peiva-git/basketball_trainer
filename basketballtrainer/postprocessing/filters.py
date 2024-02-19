@@ -19,9 +19,12 @@ def pseudocolor_mask_to_grayscale(mask: np.ndarray) -> np.ndarray:
     return mask
 
 
-def postprocess_mask(label: np.ndarray, min_size: int, max_radius: int) -> np.ndarray:
-    filtered = remove_small_objects(label.astype(bool), min_size=min_size)
-    filtered = white_tophat(filtered, footprint=disk(radius=max_radius))
+def postprocess_mask(mask: np.ndarray, min_size: int, max_radius: int, filters=('rm-small',)) -> np.ndarray:
+    filtered = mask
+    if 'rm-small' in filters:
+        filtered = remove_small_objects(filtered.astype(bool), min_size=min_size)
+    if 'rm-large' in filters:
+        filtered = white_tophat(filtered.astype(bool), footprint=disk(radius=max_radius))
     return filtered.astype(np.int64)
 
 
@@ -39,6 +42,7 @@ def postprocess_labels_dir(source_dir: pathlib.Path,
 
 def evaluate_postprocessed_masks(masks_dir: pathlib.Path,
                                  ground_truths_dir: pathlib.Path,
+                                 filters,
                                  min_size: int = 625,
                                  max_radius: int = 19) -> (np.ndarray, np.ndarray, np.ndarray, float):
     masks = imread_collection(str(masks_dir / '*.png'))
@@ -56,7 +60,7 @@ def evaluate_postprocessed_masks(masks_dir: pathlib.Path,
 
     for index, (mask, ground_truth) in enumerate(zip(masks, ground_truths)):
         grayscale_mask = pseudocolor_mask_to_grayscale(mask)
-        filtered_mask = postprocess_mask(grayscale_mask, min_size=min_size, max_radius=max_radius)
+        filtered_mask = postprocess_mask(grayscale_mask, min_size=min_size, max_radius=max_radius, filters=filters)
         intersect_area, pred_area, label_area = metrics.calculate_area(
             pp.to_tensor(filtered_mask, dtype='int64'),
             pp.to_tensor(ground_truth, dtype='int64'),
@@ -101,17 +105,26 @@ if __name__ == '__main__':
         help='Objects smaller than this size will be filtered out of the mask',
         type=int,
         required=False,
-        default=625
+        default=625  # 25 * 25
     )
     parser.add_argument(
         '--max_radius',
-        help="Disks with larger radius's will be filtered out of the mask",
+        help="Disks with a larger radius will be filtered out of the mask",
         type=int,
         required=False,
         default=19
     )
+    parser.add_argument(
+        '--filter',
+        help='Which filter to use during post-processing. '
+             'Can use multiple filters by specifying this option many times',
+        choices=['rm-large', 'rm-small'],
+        required=True,
+        action='append'
+    )
     args = parser.parse_args()
     evaluate_postprocessed_masks(pathlib.Path(args.masks_dir),
                                  pathlib.Path(args.gt_dir),
+                                 args.filter,
                                  args.min_size,
                                  args.max_radius)
