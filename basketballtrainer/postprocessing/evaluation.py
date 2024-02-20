@@ -43,7 +43,7 @@ def evaluate_postprocessed_masks(masks_dir: pathlib.Path,
         f'but got {len(masks)} masks and {len(ground_truths)} ground truths'
 
     progbar = Progbar(target=len(masks), verbose=1)
-    logger.info(f'Start evaluating (total_samples: {len(masks)}')
+    logger.info(f'Start evaluating (total_samples: {len(masks)})')
 
     intersect_area_all = pp.zeros([1], dtype='int64')
     pred_area_all = pp.zeros([1], dtype='int64')
