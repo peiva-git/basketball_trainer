@@ -2,7 +2,7 @@ import argparse
 import pathlib
 
 from skimage.io import imread_collection, imsave
-from skimage.morphology import white_tophat, remove_small_objects, disk
+from skimage.morphology import remove_small_objects
 
 from paddleseg.utils.progbar import Progbar
 from paddleseg.utils import logger
@@ -14,32 +14,28 @@ import paddle as pp
 from basketballtrainer.data import pseudocolor_mask_to_grayscale
 
 
-def postprocess_mask(mask: np.ndarray, min_size: int, max_radius: int, filters=('rm-small',)) -> np.ndarray:
-    filtered = mask
-    if 'rm-small' in filters:
-        filtered = remove_small_objects(filtered.astype(bool), min_size=min_size)
-    if 'rm-large' in filters:
-        filtered = white_tophat(filtered.astype(bool), footprint=disk(radius=max_radius))
-    return filtered.astype(np.int64)
+def postprocess_mask(mask: np.ndarray, min_size: int, max_size: int) -> np.ndarray:
+    small_removed = remove_small_objects(mask.astype(bool), min_size=min_size)
+    large_objects_mask = remove_small_objects(small_removed, min_size=max_size)
+    return small_removed.astype(np.int64) - large_objects_mask.astype(np.int64)
 
 
 def postprocess_masks_dir(source_dir: pathlib.Path,
                           target_dir: pathlib.Path,
                           min_size: int = 625,
-                          max_radius: int = 19):
+                          max_size: int = 900):
     source_pattern = str(source_dir / '*.png')
     masks = imread_collection(source_pattern)
     for mask_index, mask in enumerate(masks):
         grayscale_mask = pseudocolor_mask_to_grayscale(mask)
-        processed_mask = postprocess_mask(grayscale_mask, min_size=min_size, max_radius=max_radius)
+        processed_mask = postprocess_mask(grayscale_mask, min_size=min_size, max_size=max_size)
         imsave(str(target_dir / f'label{mask_index + 1}.png'), processed_mask, check_contrast=False)
 
 
 def evaluate_postprocessed_masks(masks_dir: pathlib.Path,
                                  ground_truths_dir: pathlib.Path,
-                                 filters,
                                  min_size: int = 625,
-                                 max_radius: int = 19) -> (np.ndarray, np.ndarray, np.ndarray, float):
+                                 max_size: int = 900) -> (np.ndarray, np.ndarray, np.ndarray, float):
     masks = imread_collection(str(masks_dir / '*.png'))
     ground_truths = imread_collection(str(ground_truths_dir / '*.png'))
     assert len(masks) == len(ground_truths), \
@@ -55,7 +51,7 @@ def evaluate_postprocessed_masks(masks_dir: pathlib.Path,
 
     for index, (mask, ground_truth) in enumerate(zip(masks, ground_truths)):
         grayscale_mask = pseudocolor_mask_to_grayscale(mask)
-        filtered_mask = postprocess_mask(grayscale_mask, min_size=min_size, max_radius=max_radius, filters=filters)
+        filtered_mask = postprocess_mask(grayscale_mask, min_size=min_size, max_size=max_size)
         intersect_area, pred_area, label_area = metrics.calculate_area(
             pp.to_tensor(filtered_mask, dtype='int64'),
             pp.to_tensor(ground_truth, dtype='int64'),
@@ -103,23 +99,14 @@ if __name__ == '__main__':
         default=625  # 25 * 25
     )
     parser.add_argument(
-        '--max_radius',
-        help="Disks with a larger radius will be filtered out of the mask",
+        '--max_size',
+        help="Objects larger than this size will be filtered out of the mask",
         type=int,
         required=False,
-        default=19
-    )
-    parser.add_argument(
-        '--filter',
-        help='Which filter to use during post-processing. '
-             'Can use multiple filters by specifying this option many times',
-        choices=['rm-large', 'rm-small'],
-        required=True,
-        action='append'
+        default=900  # 30 * 30
     )
     args = parser.parse_args()
     evaluate_postprocessed_masks(pathlib.Path(args.masks_dir),
                                  pathlib.Path(args.gt_dir),
-                                 args.filter,
-                                 args.min_size,
-                                 args.max_radius)
+                                 min_size=args.min_size,
+                                 max_size=args.max_size)
