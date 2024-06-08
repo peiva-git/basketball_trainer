@@ -17,9 +17,10 @@ This repository contains all the necessary tools to train the
 4. [Model training](#model-training)
 5. [Model evaluation](#model-evaluation)
 6. [Results](#results)
-   1. [OHEM Cross-Entropy loss function results](#ohem-cross-entropy-loss-function-results)
-   2. [Weighted Cross-Entropy loss function results](#weighted-cross-entropy-loss-function-results)
-   3. [Rancrop model results](#rancrop-model-results)
+   1. [OHEM Cross-Entropy loss function evaluation results](#ohem-cross-entropy-loss-function-evaluation-results)
+   2. [Weighted Cross-Entropy loss function evaluation results](#weighted-cross-entropy-loss-function-evaluation-results)
+   3. [Cross-test set results](#cross-test-set-results)
+   4. [Rancrop model results](#rancrop-model-results)
 7. [Credits](#credits)
 
 ## Description
@@ -112,7 +113,7 @@ All the used configurations with different parameters can be found [here](config
 
 In the following tables you can find the summarized results.
 
-### OHEM Cross-Entropy loss function results
+### OHEM Cross-Entropy loss function evaluation results
 
 | `min_kept` parameter value     | Ball class IoU | Ball class Precision | Ball class Recall | Kappa      | Links                                                                         |
 |--------------------------------|----------------|----------------------|-------------------|------------|-------------------------------------------------------------------------------|
@@ -121,13 +122,29 @@ In the following tables you can find the summarized results.
 | 60 x 60 x `batch_size` = 14400 | 0,6601         | 0,8895               | 0,7191            | 0,7952     | [config](configs/ohem_variants/pp_liteseg_base_stdc1_ohem_14400_1024x512.yml) |
 | 70 x 70 x `batch_size` = 20000 | 0,6542         | **0,9090**           | 0,7000            | 0,7979     | [config](configs/ohem_variants/pp_liteseg_base_stdc1_ohem_20000_1024x512.yml) |
 
-### Weighted Cross-Entropy loss function results
+### Weighted Cross-Entropy loss function evaluation results
 
 | Background class weight | Ball class IoU | Ball class precision | Ball class Recall | Kappa      | Links                                                                       |
 |-------------------------|----------------|----------------------|-------------------|------------|-----------------------------------------------------------------------------|
 | 0,001                   | 0,2656         | 0,2700               | **0,9422**        | 0,4195     | [config](configs/wce_variants/pp_liteseg_base_stdc1_wce_0.001_1024x512.yml) |
 | 0,005                   | 0,4703         | 0,4927               | 0,9117            | 0,6396     | [config](configs/wce_variants/pp_liteseg_base_stdc1_wce_0.005_1024x512.yml) |
 | 0,01                    | **0,5394**     | **0,5729**           | 0,9020            | **0,7007** | [config](configs/wce_variants/pp_liteseg_base_stdc1_wce_0.01_1024x512.yml)  |
+
+The test set results were consistently better than the validation set results used during the evaluation phase,
+even after trying multiple dataset splits,
+possibly indicating an over-fitting problem due to the limited dataset size.
+
+Therefore, a cross-test set has been evaluated as well, using images from a basketball field not seen during training,
+but still sufficiently similar (similar camera, similar camera angles).
+The complete report on this issue is available in the form of my master thesis [here](https://hdl.handle.net/20.500.12072/98788).
+
+### Cross-test set results
+
+| Model name      | Ball class IoU | Ball class Precision | Ball class Recall | Kappa  | Links                                                           |
+|-----------------|----------------|----------------------|-------------------|--------|-----------------------------------------------------------------|
+| PP-LiteSeg-OHEM | 0,4555         | 0,6784               | 0,5810            | 0,6258 | [config](configs/pp_liteseg_base_stdc1_ohem_10000_1024x512.yml) |
+| PP-LiteSeg-WCE  | 0,3215         | 0,3639               | 0,7339            | 0,4863 | [config](configs/pp_liteseg_base_stdc1_wce_0.01_1024x512.yml)   |
+
 
 ### Rancrop model results
 
