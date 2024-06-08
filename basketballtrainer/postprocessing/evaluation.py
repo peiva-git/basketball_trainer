@@ -1,3 +1,7 @@
+"""
+This module contains the mask post-processing functions and is used for post-processing evaluation.
+"""
+
 import argparse
 import pathlib
 
@@ -15,6 +19,14 @@ from basketballtrainer.data import pseudocolor_mask_to_grayscale
 
 
 def postprocess_mask(mask: np.ndarray, min_size: int, max_size: int) -> np.ndarray:
+    """
+    This function removes all the connected areas larger and smaller than the specified sizes from the provided mask.
+    A new array is created, the original one is left untouched.
+    :param mask: The original mask that has to be post-processed
+    :param min_size: Connected areas smaller than this size will be removed
+    :param max_size: Connected areas larger than this size will be removed
+    :return: A new mask, where the relevant connected areas have been removed
+    """
     small_removed = remove_small_objects(mask.astype(bool), min_size=min_size)
     large_objects_mask = remove_small_objects(small_removed, min_size=max_size)
     return small_removed.astype(np.int64) - large_objects_mask.astype(np.int64)
@@ -24,6 +36,15 @@ def postprocess_masks_dir(source_dir: pathlib.Path,
                           target_dir: pathlib.Path,
                           min_size: int = 625,
                           max_size: int = 900):
+    """
+    This function applies the `basketballtrainer.postprocessing.evaluation.postprocess_mask`
+    function to all the masks in the source directory and saves the results in the target directory.
+    :param source_dir: The directory where the original masks are located
+    :param target_dir: The directory where the post-processed masks will be saved
+    :param min_size: Connected areas smaller than this size will be removed
+    :param max_size: Connected areas larger than this size will be removed
+    :return: None
+    """
     source_pattern = str(source_dir / '*.png')
     masks = imread_collection(source_pattern)
     for mask_index, mask in enumerate(masks):
@@ -36,6 +57,18 @@ def evaluate_postprocessed_masks(masks_dir: pathlib.Path,
                                  ground_truths_dir: pathlib.Path,
                                  min_size: int = 625,
                                  max_size: int = 900) -> (np.ndarray, np.ndarray, np.ndarray, float):
+    """
+    This function applies the `basketballtrainer.postprocessing.evaluation.postprocess_mask` function
+    to all the masks in the masks directory and then evaluates the IoU, Precision, Recall and Kappa  metrics
+    based on the ground truth masks in the ground truth directory.
+    This function assumes the masks and ground truths have the same ordering on disk,
+    or, in other words, that the order is derived from the filenames.
+    :param masks_dir: The directory where the masks are located
+    :param ground_truths_dir: The directory where the groud truth masks are located
+    :param min_size: Connected areas smaller than this size will be removed
+    :param max_size: Connected areas larger than this size will be removed
+    :return: The IoU, Precision, Recall and Kappa metrics
+    """
     masks = imread_collection(str(masks_dir / '*.png'))
     ground_truths = imread_collection(str(ground_truths_dir / '*.png'))
     assert len(masks) == len(ground_truths), \
