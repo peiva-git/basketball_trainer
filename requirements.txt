@@ -3,5 +3,5 @@ paddleseg~=2.8.0
 Pillow>=10.0.0
 numpy>=1.25.0
 opencv-python>=4.5.0
-pdoc==14.1.*
+pdoc==14.5.*
 scikit-image~=0.22

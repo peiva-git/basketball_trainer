@@ -8,7 +8,7 @@ dependencies:
   - pip
   - paddlepaddle==2.5.1
   - pip:
-    - pdoc==14.1
+    - pdoc==14.5
     - paddleseg==2.8
     
 prefix: /home/peiva/anaconda3/envs/pp-cpu
